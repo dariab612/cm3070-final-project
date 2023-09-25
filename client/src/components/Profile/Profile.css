@@ -1,0 +1,30 @@
+.course-progress-container {
+  padding: 20px;
+}
+
+.course-details {
+  margin-bottom: 20px;
+  padding: 10px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+  background-color: #fff;
+}
+
+.course-details h2 {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.course-details p {
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.course-titles-list {
+  list-style: none;
+  padding-left: 0;
+  font-size: 14px;
+}
+
+.course-titles-list li {
+  margin-bottom: 5px;
+}

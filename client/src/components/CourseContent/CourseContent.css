@@ -1,0 +1,24 @@
+.course-content {
+  width: 27vw;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+  padding: 10px 20px;
+  margin: 20px;
+  line-height: 30px;
+}
+
+.course-content img {
+  width: 400px;
+  height: 300px;
+  cursor: pointer;
+}
+
+.course-content li {
+  list-style: none;
+  margin-bottom: 10px;
+}
+
+img.check-mark {
+  width: 14px;
+  height: 14px;
+  margin-left: 5px;
+}

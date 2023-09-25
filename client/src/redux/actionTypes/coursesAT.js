@@ -1,0 +1,4 @@
+export const coursesAT = {
+  INIT_COURSES: 'INIT_COURSES',
+  GET_FETCH_COURSES: 'GET_FETCH_COURSES',
+}

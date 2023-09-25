@@ -1,0 +1,20 @@
+.course-card {
+  width: 25vw;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+  padding: 10px 20px;
+  margin: 20px;
+  line-height: 30px;
+}
+
+.course-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.course-card img {
+  width: 100%;
+}
+
+.course-title {
+  cursor: pointer;
+}
