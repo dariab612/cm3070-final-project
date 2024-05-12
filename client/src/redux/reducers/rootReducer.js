@@ -11,6 +11,7 @@ import sessionReducer from './sessionReducer';
 import signupReducer from './signupReducer';
 import signinReducer from './signinReducer';
 import cabinetReducer from './cabinetReducer'
+import { viewedVideoProgressReducer } from './viewedVideoProgressReducer';
 
 export const rootReducer = combineReducers({
   appReducer, 
@@ -24,4 +25,5 @@ export const rootReducer = combineReducers({
   signupReducer, 
   signinReducer,
   cabinetReducer,
+  viewedVideoProgressReducer,
 });

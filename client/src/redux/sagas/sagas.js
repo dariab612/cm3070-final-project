@@ -73,8 +73,6 @@ const fetchEditReview = async ({ obj }) => {
 }
 
 const fetchAddViewedVideos = async ({ obj }) => {
-
-  console.log(obj, 'obj')
   const response = await fetch(`/viewed_videos`, {
     method: 'POST',
     headers: { 'Content-Type': 'Application/json' },
@@ -86,9 +84,39 @@ const fetchAddViewedVideos = async ({ obj }) => {
   return viewed_video
 }
 
+const fetchUpdateOrCreateViewedVideos = async ({ obj }) => {
+  const response = await fetch(`/played_viewed_videos`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'Application/json' },
+    body: JSON.stringify({
+      obj,
+    })
+  })
+  const viewed_video = await response.json()
+  return viewed_video
+}
+
+
+const fetchUpdateOrCreateViewedVideosMax = async ({ obj }) => {
+  const response = await fetch(`/max_played_viewed_videos`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'Application/json' },
+    body: JSON.stringify({
+      obj,
+    })
+  })
+  const viewed_video = await response.json()
+  return viewed_video
+}
+
+const fetchGetViewedVideos = async({ courseContentId }) => {
+  console.log('fetchGetViewedVideos courseContentId', courseContentId)
+  const response = await fetch(`/viewed_videos?courseContentId=${courseContentId}`)
+  const viewedVideos = await response.json()
+  return viewedVideos
+}
 
 function* getFetchCategories() {
-  console.log('function* getFetchCategories')
   const categories = yield call(fetchCategories);
   yield put({ type: "INIT_CATEGORIES", payload: categories });
 }
@@ -124,11 +152,24 @@ function* getEditFetchReview(action) {
 }
 
 function* addFetchViewedVideos(action) {
-  console.log(action.payload, 'action.payload')
   const viewedVideos = yield call(fetchAddViewedVideos, { obj: action.payload })
   yield put({ type: 'ADD_VIEWED_VIDEOS', payload: { viewedVideos } })
 }
 
+function* updateViewedVideoProgress(action) {
+  yield call(fetchUpdateOrCreateViewedVideos, { obj: action.payload })
+}
+
+function* getViewedVideoProgressFetch(action)  {
+  const viewedVideos = yield call(fetchGetViewedVideos, { courseContentId: action.payload.courseContentId })
+  if (viewedVideos.length) {
+    yield put({ type: 'INIT_VIEWED_VIDEO_PROGRESS', payload: { viewedVideos } })
+  }
+}
+
+function* updateViewedVideoMaxProgress(action) {
+  yield call(fetchUpdateOrCreateViewedVideosMax, { obj: action.payload })
+}
 export function* mySaga() {
   yield takeEvery('GET_FETCH_CATEGORIES', getFetchCategories);
   yield takeEvery('GET_FETCH_COURSES', getFetchCourses);
@@ -138,6 +179,9 @@ export function* mySaga() {
   yield takeEvery("APPROVE_FETCH_REVIEW", getApproveFetchReview);
   yield takeEvery("EDIT_FETCH_REVIEW", getEditFetchReview);
   yield takeEvery("ADD_FETCH_VIEWED_VIDEOS", addFetchViewedVideos);
+  yield takeEvery("UPDATE_VIEWED_VIDEO_PROGRESS", updateViewedVideoProgress);
+  yield takeEvery('GET_VIEWED_VIDEO_PROGRESS_FETCH', getViewedVideoProgressFetch);
+  yield takeEvery("UPDATE_VIEWED_VIDEO_MAX_PROGRESS", updateViewedVideoMaxProgress);
 }
 
 export default mySaga;

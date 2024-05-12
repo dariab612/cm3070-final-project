@@ -36,6 +36,14 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       },
     },
+    playedSeconds: {
+      allowNull: true,
+      type: DataTypes.FLOAT,
+    },
+    maxPlayedSeconds: {
+      allowNull: true,
+      type: DataTypes.FLOAT,
+    },
     createdAt: {
       allowNull: false,
       type: DataTypes.DATE,

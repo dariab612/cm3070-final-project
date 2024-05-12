@@ -4,7 +4,6 @@ const CabinetFetch = async () => {
   console.log('CabinetFetch')
   const response = await fetch(`/profile`)
   const responseJson = await response.json()
-  console.log(responseJson, 'responseJson')
   return responseJson
 }
 

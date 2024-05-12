@@ -18,6 +18,14 @@ module.exports = {
           key: 'id',
         },
       },
+      playedSeconds: {
+        allowNull: true,
+        type: Sequelize.FLOAT,
+      },
+      maxPlayedSeconds: {
+        allowNull: true,
+        type: Sequelize.FLOAT,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

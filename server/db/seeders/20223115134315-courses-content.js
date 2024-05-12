@@ -2,13 +2,13 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.bulkInsert('CourseContents', [
       {
-        title: "Lesson 1: Long Haircut tutorial", picture: "images/woman_hair_preview_1.jpg", link: 'https://www.youtube.com/watch?v=857xMQMf-KQ', courseId: '1', createdAt: new Date(), updatedAt: new Date(),
+        title: "Lesson 1: Long Haircut tutorial", picture: "images/woman_hair_preview_1.jpg", link: 'https://www.youtube.com/embed/tp-hzy0mi1g?si=0qTu8wl2oATfh89a', courseId: '1', createdAt: new Date(), updatedAt: new Date(),
       },
       {
-        title: "Lesson 2: How to cut a Basic Square Layered Haircut", picture: "images/woman_hair_preview_2.jpg", link: 'https://www.youtube.com/watch?v=i1fCoZnbHIo', courseId: '1', createdAt: new Date(), updatedAt: new Date(),
+        title: "Lesson 2: How to cut a Basic Square Layered Haircut", picture: "images/woman_hair_preview_2.jpg", link: 'https://www.youtube.com/embed/i1fCoZnbHIo?si=mAjRu7S9JNo9AFVp', courseId: '1', createdAt: new Date(), updatedAt: new Date(),
       },
       {
-        title: "Lesson 3: Best Layered Haircut For Fine Hair", picture: "images/woman_hair_preview_3.jpg", link: 'https://www.youtube.com/watch?v=ET3Tpxgr2vs', courseId: '1', createdAt: new Date(), updatedAt: new Date(),
+        title: "Lesson 3: Best Layered Haircut For Fine Hair", picture: "images/woman_hair_preview_3.jpg", link: 'https://www.youtube.com/embed/ET3Tpxgr2vs?si=2Z0Pirv5C74XpWvo', courseId: '1', createdAt: new Date(), updatedAt: new Date(),
       },
       {
         title: "Lesson 1: Basic Mens Haircut", picture: "images/lesson_1_men_haircut.jpg", link: 'https://www.youtube.com/watch?v=B9UjXAeXn-Y', courseId: '2', createdAt: new Date(), updatedAt: new Date(),

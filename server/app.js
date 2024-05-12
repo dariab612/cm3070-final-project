@@ -11,6 +11,8 @@ const app = express();
 
 const PORT = process.env.PORT ?? 3001;
 
+const maxPlayedViewedVideosRoute = require('./routes/maxPlayedViewedVideos.route');
+const playedViewedVideosRoute = require('./routes/playedViewedVideos.route');
 const viewedVideosRoute = require('./routes/viewedVideos.route');
 const reviewsRoute = require('./routes/reviews.route');
 const categoriesRoute = require('./routes/categories.route');
@@ -50,6 +52,8 @@ app.use(cors({
   origin: 'http://localhost:3000',
 }));
 
+app.use('/max_played_viewed_videos', maxPlayedViewedVideosRoute)
+app.use('/played_viewed_videos', playedViewedVideosRoute)
 app.use('/viewed_videos', viewedVideosRoute)
 app.use('/reviews', reviewsRoute);
 app.use('/categories', categoriesRoute);
