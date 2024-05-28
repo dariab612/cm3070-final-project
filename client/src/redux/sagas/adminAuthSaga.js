@@ -1,7 +1,7 @@
 import { call, put, takeEvery } from 'redux-saga/effects'
 
 const adminAuthFetch = async ({ login, pass }) => {
-  const response = await fetch(`/adminform`, {
+  const response = await fetch(`/admin-auth`, {
     method: 'POST',
     headers: { 'Content-Type': 'Application/json' },
     body: JSON.stringify({

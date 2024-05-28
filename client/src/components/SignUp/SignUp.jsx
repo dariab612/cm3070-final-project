@@ -16,7 +16,7 @@ function SignUp(props) {
     event.preventDefault();
 
     try {
-      const response = await fetch('/signup', {
+      const response = await fetch('/sign-up', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

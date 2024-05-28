@@ -24,6 +24,8 @@ export function AddReviewForm() {
     dispatch({ type: 'ADD_FETCH_REVIEW', payload: { name: name, text: text, isValid: isValid } })
     setName('')
     setText('')
+
+    alert('Your review will be displayed after the moderator approves it.');
   }
 
   return (

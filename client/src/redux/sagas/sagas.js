@@ -15,7 +15,7 @@ const fetchCourses = async ({ id }) => {
 
 const fetchCourseContentList = async ({ id }) => {
   const response = await
-    fetch(`/courseContent/${id}`)
+    fetch(`/course-content/${id}`)
   const courseContentList = await response.json()
   return courseContentList
 }
@@ -61,7 +61,7 @@ const fetchApproveReview = async ({ id }) => {
 }
 
 const fetchEditReview = async ({ obj }) => {
-  const response = await fetch(`/editreview`, {
+  const response = await fetch(`/edit-review`, {
     method: 'PUT',
     headers: { 'Content-Type': 'Application/json' },
     body: JSON.stringify({
@@ -73,7 +73,7 @@ const fetchEditReview = async ({ obj }) => {
 }
 
 const fetchAddViewedVideos = async ({ obj }) => {
-  const response = await fetch(`/viewed_videos`, {
+  const response = await fetch(`/viewed-videos`, {
     method: 'POST',
     headers: { 'Content-Type': 'Application/json' },
     body: JSON.stringify({
@@ -85,7 +85,7 @@ const fetchAddViewedVideos = async ({ obj }) => {
 }
 
 const fetchUpdateOrCreateViewedVideos = async ({ obj }) => {
-  const response = await fetch(`/played_viewed_videos`, {
+  const response = await fetch(`/played-viewed-videos`, {
     method: 'POST',
     headers: { 'Content-Type': 'Application/json' },
     body: JSON.stringify({
@@ -98,7 +98,19 @@ const fetchUpdateOrCreateViewedVideos = async ({ obj }) => {
 
 
 const fetchUpdateOrCreateViewedVideosMax = async ({ obj }) => {
-  const response = await fetch(`/max_played_viewed_videos`, {
+  const response = await fetch(`/max-played-viewed-videos`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'Application/json' },
+    body: JSON.stringify({
+      obj,
+    })
+  })
+  const viewed_video = await response.json()
+  return viewed_video
+}
+
+const fetchUpdateOrCreateViewedVideosTotal = async ({ obj }) => {
+  const response = await fetch(`/viewed-videos-total-seconds`, {
     method: 'POST',
     headers: { 'Content-Type': 'Application/json' },
     body: JSON.stringify({
@@ -110,8 +122,7 @@ const fetchUpdateOrCreateViewedVideosMax = async ({ obj }) => {
 }
 
 const fetchGetViewedVideos = async({ courseContentId }) => {
-  console.log('fetchGetViewedVideos courseContentId', courseContentId)
-  const response = await fetch(`/viewed_videos?courseContentId=${courseContentId}`)
+  const response = await fetch(`/viewed-videos?courseContentId=${courseContentId}`)
   const viewedVideos = await response.json()
   return viewedVideos
 }
@@ -170,6 +181,11 @@ function* getViewedVideoProgressFetch(action)  {
 function* updateViewedVideoMaxProgress(action) {
   yield call(fetchUpdateOrCreateViewedVideosMax, { obj: action.payload })
 }
+
+
+function* updateViewedVideoTotalSeconds(action) {
+  yield call(fetchUpdateOrCreateViewedVideosTotal, { obj: action.payload })
+}
 export function* mySaga() {
   yield takeEvery('GET_FETCH_CATEGORIES', getFetchCategories);
   yield takeEvery('GET_FETCH_COURSES', getFetchCourses);
@@ -182,6 +198,7 @@ export function* mySaga() {
   yield takeEvery("UPDATE_VIEWED_VIDEO_PROGRESS", updateViewedVideoProgress);
   yield takeEvery('GET_VIEWED_VIDEO_PROGRESS_FETCH', getViewedVideoProgressFetch);
   yield takeEvery("UPDATE_VIEWED_VIDEO_MAX_PROGRESS", updateViewedVideoMaxProgress);
+  yield takeEvery("UPDATE_VIEWED_VIDEO_TOTAL_SECONDS", updateViewedVideoTotalSeconds);
 }
 
 export default mySaga;

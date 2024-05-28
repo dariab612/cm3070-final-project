@@ -16,7 +16,6 @@ router.route('/')
       const coursesContent = await CourseContent.findAll();
       
       const courseMap = new Map(courses.map(course => [course.id, course]));
-
       const viewedVideosCountMap = new Map();
       viewedVideos.forEach(video => {
         const content = coursesContent.find(content => content.id === video.courseContentId);
@@ -28,9 +27,12 @@ router.route('/')
           viewedVideosCountMap.set(courseId, viewedVideosCountMap.get(courseId) + 1);
         }
       });
-  
+
       const updatedCoursesContent = coursesContent.map(content => {
         const courseDetails = courseMap.get(content.courseId);
+
+        const viewedVideosCourseContent = viewedVideos.find(video => video.courseContentId === content.id);
+        
         return {
           ...content,
           dataValues: {
@@ -38,6 +40,7 @@ router.route('/')
             courseTitle: courseDetails.name,
             numberOfVideos: courseDetails.numberOfVideos,
             viewedVideoCount: viewedVideosCountMap.get(content.courseId) || 0,
+            viewedVideosCourseContent,
           }
         };
       });

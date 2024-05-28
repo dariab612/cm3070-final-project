@@ -1,7 +1,7 @@
 import { call, put, takeEvery } from 'redux-saga/effects'
 
 const adminChangePassFetch = async ({ oldPass, newPass, newPass2 }) => {
-  const response = await fetch(`/adminpasschange`, {
+  const response = await fetch(`/admin-pass-change`, {
     method: 'POST',
     headers: { 'Content-Type': 'Application/json' },
     body: JSON.stringify({

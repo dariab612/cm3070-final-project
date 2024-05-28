@@ -44,6 +44,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       type: DataTypes.FLOAT,
     },
+    totalSeconds: {
+      allowNull: true,
+      type: DataTypes.FLOAT,
+    },
     createdAt: {
       allowNull: false,
       type: DataTypes.DATE,

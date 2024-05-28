@@ -11,6 +11,7 @@ const app = express();
 
 const PORT = process.env.PORT ?? 3001;
 
+const totalSecondsViewedVideosRoute = require('./routes/totalSecondsViewedVideous.route');
 const maxPlayedViewedVideosRoute = require('./routes/maxPlayedViewedVideos.route');
 const playedViewedVideosRoute = require('./routes/playedViewedVideos.route');
 const viewedVideosRoute = require('./routes/viewedVideos.route');
@@ -52,20 +53,21 @@ app.use(cors({
   origin: 'http://localhost:3000',
 }));
 
-app.use('/max_played_viewed_videos', maxPlayedViewedVideosRoute)
-app.use('/played_viewed_videos', playedViewedVideosRoute)
-app.use('/viewed_videos', viewedVideosRoute)
+app.use('/viewed-videos-total-seconds', totalSecondsViewedVideosRoute)
+app.use('/max-played-viewed-videos', maxPlayedViewedVideosRoute)
+app.use('/played-viewed-videos', playedViewedVideosRoute)
+app.use('/viewed-videos', viewedVideosRoute)
 app.use('/reviews', reviewsRoute);
 app.use('/categories', categoriesRoute);
-app.use('/courseContent', courseContentRoute);
-app.use('/signup', clientRouter);
-app.use('/signin', signinRouter);
-app.use('/signout', signoutRouter);
-app.use('/adminform', adminAuthRouter);
+app.use('/course-content', courseContentRoute);
+app.use('/sign-up', clientRouter);
+app.use('/sign-in', signinRouter);
+app.use('/sign-out', signoutRouter);
+app.use('/admin-auth', adminAuthRouter);
 app.use('/profile', cabinetRouter);
 app.use('/session', sessionRouter);
-app.use('/adminpasschange', adminPassChange);
-app.use('/editreview', editReviewRouter);
+app.use('/admin-pass-change', adminPassChange);
+app.use('/edit-review', editReviewRouter);
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());

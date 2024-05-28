@@ -9,7 +9,7 @@ function Nav(props) {
 
   async function signOut() {
     try {
-      await fetch('/signout');
+      await fetch('/sign-out');
       dispatch({ type: 'SESSION_FETCH' })
     }
     catch (err) {

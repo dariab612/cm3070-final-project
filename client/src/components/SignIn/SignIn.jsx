@@ -12,7 +12,7 @@ function SignIn(props) {
   async function clientFormHandler(event, clientPassInput, clientPhoneInput) {
     event.preventDefault();
     try {
-      const response = await fetch('/signin', {
+      const response = await fetch('/sign-in', {
         method: 'POST',
         headers: { 'Content-Type': 'Application/json' },
         body: JSON.stringify({

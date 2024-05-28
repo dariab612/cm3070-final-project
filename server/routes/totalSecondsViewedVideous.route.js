@@ -2,7 +2,7 @@ const route = require('express').Router();
 const { ViewedVideos } = require('../db/models');
 
 route.post('/', async (req, res) => {
-  const { courseContentId, progress } = req.body.obj;
+  const { courseContentId, totalSeconds } = req.body.obj;
   if (req.session && req.session.user) {
     const clientNumber = req.session.user.telephone;
 
@@ -15,7 +15,7 @@ route.post('/', async (req, res) => {
 
     if (viewedVideo) {
       await ViewedVideos.update(
-        { playedSeconds: progress },
+        { totalSeconds: totalSeconds },
         {
           where: {
             courseContentId,
@@ -23,11 +23,11 @@ route.post('/', async (req, res) => {
           }
         }
       );
-      viewedVideo.playedSeconds = progress;
+      viewedVideo.totalSeconds = totalSeconds;
     } else {
       viewedVideo = await ViewedVideos.create({
         courseContentId,
-        playedSeconds: progress,
+        totalSeconds: totalSeconds,
         clientNumber
       });
     }

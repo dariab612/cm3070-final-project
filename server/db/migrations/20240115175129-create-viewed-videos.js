@@ -26,6 +26,10 @@ module.exports = {
         allowNull: true,
         type: Sequelize.FLOAT,
       },
+      totalSeconds: {
+        allowNull: true,
+        type: Sequelize.FLOAT,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

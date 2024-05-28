@@ -10,7 +10,6 @@ function CourseContent({ courseContent }) {
   console.log(viewedVideos, 'viewedVideos')
   const [progress, setProgress] = useState(0);
   const [maxProgress, setMaxProgress] = useState(0);
-  console.log('PROGRESS:',progress)
 
   useEffect(() => {
     dispatch({ type: 'CABINET_FETCH' });
@@ -18,11 +17,10 @@ function CourseContent({ courseContent }) {
 
   const hasViewed = viewedVideos?.some(video => video.courseContentId === courseContent.id);
 
+  let isStopped = false
   const handleProgress = (progress) => {
     setProgress(prevProgress => {
-      console.log('22')
       if (Math.abs(progress.playedSeconds - prevProgress) >= 8) {
-        console.log('24')
         dispatch({ type: 'UPDATE_VIEWED_VIDEO_PROGRESS', payload: { courseContentId: courseContent.id, progress: progress.playedSeconds } });
         return progress.playedSeconds;
       }
@@ -30,11 +28,10 @@ function CourseContent({ courseContent }) {
     })
 
     setMaxProgress(prevProgress => {
-      console.log('32')
-      if (maxProgress.maxPlayedSeconds - prevProgress >= 8) {
-        console.log('34')
-        dispatch({ type: 'UPDATE_VIEWED_VIDEO_MAX_PROGRESS', payload: { courseContentId: courseContent.id, maxProgress: maxProgress.maxPlayedSeconds } });
-        return maxProgress.maxPlayedSeconds;
+      if ((progress.playedSeconds - prevProgress >= 8) || isStopped) {
+        isStopped = false
+        dispatch({ type: 'UPDATE_VIEWED_VIDEO_MAX_PROGRESS', payload: { courseContentId: courseContent.id, maxProgress: progress.playedSeconds } });
+        return progress.playedSeconds;
       }
       return prevProgress;
     })
@@ -44,9 +41,22 @@ function CourseContent({ courseContent }) {
   const onReady = React.useCallback(() => {
     const videoProgressed = viewedVideos.find(video => video.courseContentId === courseContent.id);
     const timeToStart = videoProgressed.playedSeconds;
-    console.log(timeToStart, timeToStart)
     playerRef.current.seekTo(timeToStart, 'seconds');
   }, [playerRef.current, viewedVideos]);
+
+  const handleDuration = (duration) => {
+    console.log(duration, 'duration', courseContent.id)
+
+    dispatch({ type: 'UPDATE_VIEWED_VIDEO_TOTAL_SECONDS', payload: { courseContentId: courseContent.id, totalSeconds: duration } });
+  }
+
+  const onPause = () => {
+    isStopped = true
+  }
+
+  const onStop = () => {
+    isStopped = true
+  }
 
   return (
     <div className="course-content">
@@ -55,7 +65,10 @@ function CourseContent({ courseContent }) {
           <ReactPlayer  url={courseContent.link}
             ref={playerRef}
             onProgress={handleProgress}
+            onDuration={handleDuration}
             onReady={onReady}
+            onPause={onPause}
+            onStop={onStop}
             width = '600'
             controls={true}
           />
