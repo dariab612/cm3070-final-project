@@ -20,6 +20,7 @@ function AdminCabinet(props) {
       <div className="admin-menu">
         <Link to="/adminreview">Reviews</Link>
         <Link to="/adminchangepass">Change Password</Link>
+        <Link to="/admincategories">Admin Categories</Link>
       </div>
       </>
       : <div>Page not found</div>

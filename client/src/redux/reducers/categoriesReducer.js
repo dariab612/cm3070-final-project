@@ -1,6 +1,5 @@
 import { categoriesAT } from '../actionTypes/categoriesAT';
 
-// const cats = ''
 const categoriesInitialState = {
   categories: {}
 }

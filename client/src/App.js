@@ -15,6 +15,7 @@ import Donation from "./components/Donation/Donation.jsx";
 import AdminReview from './components/AdminReview/AdminReview.jsx';
 import AdminChangePass from './components/AdminChangePass/AdminChangePass.jsx';
 import About from "./components/About/About.jsx"
+import AdminCategories from "./components/AdminCategories/AdminCategories.jsx"
 import { useDispatch } from "react-redux";
 
 function App() {
@@ -85,6 +86,10 @@ function App() {
 
         <Route exact path="/adminchangepass">
           <AdminChangePass />
+        </Route>
+
+        <Route exact path="/admincategories">
+          <AdminCategories />
         </Route>
 
       </Switch>

@@ -46,6 +46,19 @@ const fetchReview = async ({ id }) => {
   return review
 }
 
+const fetchCategory = async ({ id }) => {
+
+  const response = await fetch(`/categories/${id}`, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'Application/json' },
+    body: JSON.stringify({
+      id,
+    })
+  })
+  const category = await response.json()
+  return category
+}
+
 const fetchApproveReview = async ({ id }) => {
 
   const response = await fetch(`/reviews/${id}`, {
@@ -71,6 +84,32 @@ const fetchEditReview = async ({ obj }) => {
   const review = await response.json()
   return review
 }
+
+const fetchEditCategory = async (obj) => {
+  const response = await fetch(`/edit-category`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'Application/json' },
+    body: JSON.stringify({
+      obj,
+    })
+  })
+  const review = await response.json()
+  return review
+}
+
+const fetchAddCategory = async (obj) => {
+  const response = await fetch(`/categories`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'Application/json' },
+    body: JSON.stringify({
+      obj,
+    })
+  })
+  const review = await response.json()
+  return review
+}
+
+
 
 const fetchAddViewedVideos = async ({ obj }) => {
   const response = await fetch(`/viewed-videos`, {
@@ -152,6 +191,21 @@ function* deleteFetchReview(action) {
   yield put({ type: 'DELETE_REVIEW', payload: { review } })
 }
 
+function* deleteFetchCategory(action) {
+  const category = yield call(fetchCategory, { id: action.payload.id })
+  yield put({ type: 'DELETE_CATEGORY', payload: { category } })
+}
+
+function* editFetchCategory(action) {
+  const category = yield call(fetchEditCategory, action.payload)
+  yield put({ type: 'EDIT_CATEGORY', payload: { category } })
+}
+
+function* addFetchCategory(action) {
+  const category = yield call(fetchAddCategory(action.payload))
+  yield put({ type: 'ADD_CATEGORY', payload: { category } })
+}
+
 function* getApproveFetchReview(action) {
   const review = yield call(fetchApproveReview, { id: action.payload.reviewId })
   yield put({ type: 'CHANGE_STATUS_REVIEW', payload: { review } })
@@ -199,6 +253,9 @@ export function* mySaga() {
   yield takeEvery('GET_VIEWED_VIDEO_PROGRESS_FETCH', getViewedVideoProgressFetch);
   yield takeEvery("UPDATE_VIEWED_VIDEO_MAX_PROGRESS", updateViewedVideoMaxProgress);
   yield takeEvery("UPDATE_VIEWED_VIDEO_TOTAL_SECONDS", updateViewedVideoTotalSeconds);
+  yield takeEvery("DELETE_FETCH_CATEGORY", deleteFetchCategory);
+  yield takeEvery("EDIT_FETCH_CATEGORY", editFetchCategory);
+  yield takeEvery("ADD_FETCH_CATEGORY", addFetchCategory);
 }
 
 export default mySaga;
