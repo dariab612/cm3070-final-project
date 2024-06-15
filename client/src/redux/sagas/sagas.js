@@ -13,6 +13,13 @@ const fetchCourses = async ({ id }) => {
   return courses
 }
 
+const fetchAllCourses = async () => {
+  const response = await
+  fetch('/courses')
+  const courses = await response.json()
+  return courses
+}
+
 const fetchCourseContentList = async ({ id }) => {
   const response = await
     fetch(`/course-content/${id}`)
@@ -105,11 +112,46 @@ const fetchAddCategory = async (obj) => {
       obj,
     })
   })
-  const review = await response.json()
-  return review
+  const category = await response.json()
+  return category
 }
 
 
+const fetchAddCourse = async (obj) => {
+  const response = await fetch(`/courses`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'Application/json' },
+    body: JSON.stringify({
+      obj,
+    })
+  })
+  const course = await response.json()
+  return course
+}
+
+const fetchEditCourse = async (obj) => {
+  const response = await fetch(`/courses/${obj.id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'Application/json' },
+    body: JSON.stringify({
+      obj,
+    })
+  })
+  const course = await response.json()
+  return course
+}
+
+const fetchDeleteCourse = async (obj) => {
+  const response = await fetch(`/courses/${obj.id}`, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'Application/json' },
+    body: JSON.stringify({
+      obj,
+    })
+  })
+  const course = await response.json()
+  return course
+} 
 
 const fetchAddViewedVideos = async ({ obj }) => {
   const response = await fetch(`/viewed-videos`, {
@@ -206,6 +248,26 @@ function* addFetchCategory(action) {
   yield put({ type: 'ADD_CATEGORY', payload: { category } })
 }
 
+function* getFetchAllCourses() {
+  const courses = yield call(fetchAllCourses)
+  yield put({ type: 'INIT_COURSES', payload: { courses } })
+}
+
+function* addFetchCourse(action) {
+  const courses = yield call(fetchAddCourse(action.payload))
+  yield put({ type: 'ADD_COURSE', payload: { courses } })
+}
+
+function* editFetchCourse(action) {
+  const courses = yield call(fetchEditCourse(action.payload))
+  yield put({ type: 'EDIT_COURSE', payload: { courses } })
+}
+
+function* deleteFetchCourse(action) {
+  const course = yield call(fetchDeleteCourse({ id: action.payload.id }))
+  yield put({ type: 'DELETE_COURSE', payload: { course } })
+}
+
 function* getApproveFetchReview(action) {
   const review = yield call(fetchApproveReview, { id: action.payload.reviewId })
   yield put({ type: 'CHANGE_STATUS_REVIEW', payload: { review } })
@@ -256,6 +318,10 @@ export function* mySaga() {
   yield takeEvery("DELETE_FETCH_CATEGORY", deleteFetchCategory);
   yield takeEvery("EDIT_FETCH_CATEGORY", editFetchCategory);
   yield takeEvery("ADD_FETCH_CATEGORY", addFetchCategory);
+  yield takeEvery("GET_FETCH_ALL_COURSES", getFetchAllCourses);
+  yield takeEvery("ADD_FETCH_COURSE", addFetchCourse);
+  yield takeEvery("EDIT_FETCH_COURSE", editFetchCourse);
+  yield takeEvery("DELETE_FETCH_COURSE", deleteFetchCourse);
 }
 
 export default mySaga;

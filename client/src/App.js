@@ -16,6 +16,7 @@ import AdminReview from './components/AdminReview/AdminReview.jsx';
 import AdminChangePass from './components/AdminChangePass/AdminChangePass.jsx';
 import About from "./components/About/About.jsx"
 import AdminCategories from "./components/AdminCategories/AdminCategories.jsx"
+import AdminCourses from "./components/AdminCourses/AdminCourses.jsx"
 import { useDispatch } from "react-redux";
 
 function App() {
@@ -92,6 +93,10 @@ function App() {
           <AdminCategories />
         </Route>
 
+        <Route exact path="/admincourses">
+          <AdminCourses />
+        </Route>
+    
       </Switch>
 
     </BrowserRouter>

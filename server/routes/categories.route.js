@@ -11,6 +11,7 @@ router.route('/')
   .post(async (req, res) => {
     const { name } = req.body.obj;
     const { pictureName } = req.body.obj;
+  
     await Category.create({
       name, 
       picture: `/images/${pictureName}.jpg`

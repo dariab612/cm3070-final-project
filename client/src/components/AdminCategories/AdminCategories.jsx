@@ -10,10 +10,7 @@ function AdminCategories(props) {
   const categories = useSelector((state) => state.categoriesReducer.categories)
   const dispatch = useDispatch()
   useEffect(() => {dispatch({ type: 'GET_FETCH_CATEGORIES' })}, [dispatch])
-
   console.log(categories, 'categories')
-
-  
   const [ addModal, setAddModal ] = useState(false)
 
   return (
@@ -23,6 +20,7 @@ function AdminCategories(props) {
    <div className="admin-menu">
      <Link to="/adminreview">Reviews</Link>
      <Link to="/adminchangepass">Change Password</Link>
+     <Link to="/admincourses">Admin Courses</Link>
    </div>
    <div className="categories-main-page">
       {categories.length? 

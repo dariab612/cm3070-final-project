@@ -26,6 +26,7 @@ const adminPassChange = require('./routes/AdminPassChange.router');
 const signoutRouter = require('./routes/signout.route');
 const editReviewRouter = require('./routes/editreview.route');
 const editCategoryRouter = require('./routes/editcategory.route');
+const coursesRouter = require('./routes/courses.route');
 const sessionRouter = require('./routes/session.route');
 
 const sessionMiddleware = require('./middlewares/sessions');
@@ -70,6 +71,7 @@ app.use('/session', sessionRouter);
 app.use('/admin-pass-change', adminPassChange);
 app.use('/edit-review', editReviewRouter);
 app.use('/edit-category', editCategoryRouter);
+app.use('/courses', coursesRouter);
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());

@@ -20,8 +20,8 @@ function Modal(props) {
 
   function editReviewFunc(event) {
     event.preventDefault()
-    const name = event.target.clientReviewName.value
-    const picture = event.target.newReviewValue.value
+    const name = event.target.categoryName.value
+    const picture = event.target.pictureName.value
     dispatch( { type: 'EDIT_FETCH_CATEGORY', payload: { id: id, name: name, picture: picture } })
     setName('')
     setPicture('')
@@ -32,11 +32,11 @@ function Modal(props) {
   return (
     <div>
        <form onSubmit={editReviewFunc}>
-      <input value={name} type="text" onChange={nameChange} placeholder={name1} name='clientReviewName'/>
+      <input value={name} type="text" onChange={nameChange} placeholder={name1} name='categoryName'/>
       <br />
-      <textarea value={picture} onChange={pictureChange} placeholder={picture1} name='newReviewValue'></textarea>
+      <input value={picture} onChange={pictureChange} placeholder={picture1} name='pictureName'></input>
       <br />
-      <button type='submit'>Send feedback</button>
+      <button type='submit'>Edit category</button>
     </form>
     </div>
   );
