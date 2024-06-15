@@ -10,9 +10,8 @@ function AdminCategories(props) {
   const categories = useSelector((state) => state.categoriesReducer.categories)
   const dispatch = useDispatch()
   useEffect(() => {dispatch({ type: 'GET_FETCH_CATEGORIES' })}, [dispatch])
-  console.log(categories, 'categories')
   const [ addModal, setAddModal ] = useState(false)
-
+  console.log(categories, 'categories')
   return (
     <div>
    <>

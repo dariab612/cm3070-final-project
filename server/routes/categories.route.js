@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const { Category } = require('../db/models');
 const { Course } = require('../db/models');
+const path = require('path');
 
 router.route('/')
   .get((req, res) => {
@@ -9,16 +10,29 @@ router.route('/')
       .catch((error) => console.log(error));
   })
   .post(async (req, res) => {
-    const { name } = req.body.obj;
-    const { pictureName } = req.body.obj;
-  
-    await Category.create({
-      name, 
-      picture: `/images/${pictureName}.jpg`
-    })    
-    .then((newCategory) => res.status(201).json(newCategory))
-    .catch((error) => res.status(500).json(error));
-  });
+    if (!req.files || Object.keys(req.files).length === 0) {
+      return res.status(400).send('No files were uploaded.');
+    }
+    const { name } = req.body;
+    const pictureFile = req.files.picture;
+    const uploadPath = path.join(__dirname, '../..', 'client', 'public', 'images', pictureFile.name);
+
+    pictureFile.mv(uploadPath, async (err) => {
+      if (err) {
+        return res.status(500).send(err);
+      }
+
+      try {
+        const newCategory = await Category.create({
+          name,
+          picture: `/images/${pictureFile.name}`
+        });
+        res.status(201).json(newCategory);
+      } catch (error) {
+        res.status(500).json(error);
+      }
+    });
+  })
 router.route('/:id')
   .get((req, res) => {
     const { params } = req;

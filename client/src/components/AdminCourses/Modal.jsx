@@ -11,15 +11,16 @@ function Modal(props) {
 
   const dispatch = useDispatch()
   const [name, setName] = useState('');
-  const [picture, setPicture] = useState('');
+  const [pictureFile, setPictureFile] = useState(null);
   const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
 
   function nameChange({ target: { value } }) {
     setName(value)
   }
-  function pictureChange({ target: { value } }) {
-    setPicture(value)
+
+  function pictureChange({ target: { files } }) {
+    setPictureFile(files[0]);
   }
 
   function categoryChange({ target: { value } }) {
@@ -33,15 +34,18 @@ function Modal(props) {
 
   function editCourseFunc(event) {
     event.preventDefault()
-    const name = event.target.courseName.value
-    const picture = event.target.pictureName.value
-    const category = event.target.categoryName.value
-    const description = event.target.description.value
-    dispatch( { type: 'EDIT_FETCH_COURSE', payload: { id, name, pictureName: picture, categoryName: category,  description  } })
-    setName('')
-    setPicture('')
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('picture', pictureFile);
+    formData.append('categoryName', category);
+    formData.append('description', description);
+    formData.append('id', id);
 
-    alert('Successfully edited category');
+    dispatch( { type: 'EDIT_FETCH_COURSE', payload: formData })
+    setName('')
+    setPictureFile(null)
+
+    alert('Successfully edited course');
   }
 
   return (
@@ -49,7 +53,7 @@ function Modal(props) {
        <form onSubmit={editCourseFunc}>
       <input value={name} type="text" onChange={nameChange} placeholder={`Course Name: ${name1}`} name='courseName'/>
       <br />
-      <input value={picture} onChange={pictureChange} placeholder={`Picture Name: ${picture1}`} name='pictureName'></input>
+      <input type="file" onChange={pictureChange} placeholder={picture1} accept="image/jpeg, image/png, image/jpg" name='coursePicture' />
       <br />
       <input value={category} onChange={categoryChange} placeholder={`Category Name: ${category1}`} name='categoryName'></input>
       <br />

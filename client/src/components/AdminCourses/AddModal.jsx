@@ -10,15 +10,16 @@ function AddModal() {
 
   const dispatch = useDispatch()
   const [name, setName] = useState('');
-  const [picture, setPicture] = useState('');
+  const [pictureFile, setPictureFile] = useState(null);
   const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
 
   function nameChange({ target: { value } }) {
     setName(value)
   }
-  function pictureChange({ target: { value } }) {
-    setPicture(value)
+
+  function pictureChange({ target: { files } }) {
+    setPictureFile(files[0]);
   }
 
   function categoryChange({ target: { value } }) {
@@ -31,14 +32,15 @@ function AddModal() {
 
   function addCourseFunc(event) {
     event.preventDefault()
-    const name = event.target.courseName.value
-    const pictureName = event.target.coursePictureName.value
-    const categoryName = event.target.categoryName.value
-    const description = event.target.categoryName.value
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('picture', pictureFile);
+    formData.append('categoryName', category);
+    formData.append('description', description);
 
-    dispatch({ type: 'ADD_FETCH_COURSE', payload: { name, pictureName, categoryName, description } })
+    dispatch({ type: 'ADD_FETCH_COURSE', payload: formData })
     setName('')
-    setPicture('')
+    setPictureFile(null)
     setCategory('')
     setDescription('')
 
@@ -50,7 +52,7 @@ function AddModal() {
        <form onSubmit={addCourseFunc}>
       <input value={name} type="text" onChange={nameChange} placeholder={name1} name='courseName'/>
       <br />
-      <input value={picture} onChange={pictureChange} placeholder={picture1} name='coursePictureName'></input>
+      <input type="file" onChange={pictureChange} placeholder={picture1} accept="image/jpeg, image/png, image/jpg" name='coursePicture' />
       <br />
       <input value={category} onChange={categoryChange} placeholder={category1} name='categoryName'></input>
       <br />

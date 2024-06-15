@@ -9,22 +9,25 @@ function Modal(props) {
 
   const dispatch = useDispatch()
   const [name, setName] = useState('');
-  const [picture, setPicture] = useState('');
+  const [pictureFile, setPictureFile] = useState(null);
 
   function nameChange({ target: { value } }) {
     setName(value)
   }
-  function pictureChange({ target: { value } }) {
-    setPicture(value)
+  function pictureChange({ target: { files } }) {
+    setPictureFile(files[0]);
   }
 
   function editReviewFunc(event) {
     event.preventDefault()
-    const name = event.target.categoryName.value
-    const picture = event.target.pictureName.value
-    dispatch( { type: 'EDIT_FETCH_CATEGORY', payload: { id: id, name: name, picture: picture } })
+    const formData = new FormData();
+    formData.append('name', name);
+    console.log(pictureFile, 'pictureFile')
+    formData.append('picture', pictureFile);
+    formData.append('id', id);
+    dispatch( { type: 'EDIT_FETCH_CATEGORY', payload: formData })
     setName('')
-    setPicture('')
+    setPictureFile(null)
 
     alert('Successfully edited category');
   }
@@ -34,7 +37,7 @@ function Modal(props) {
        <form onSubmit={editReviewFunc}>
       <input value={name} type="text" onChange={nameChange} placeholder={name1} name='categoryName'/>
       <br />
-      <input value={picture} onChange={pictureChange} placeholder={picture1} name='pictureName'></input>
+      <input type="file" onChange={pictureChange} placeholder={picture1} accept="image/jpeg, image/png, image/jpg" name='categoryPicture' />
       <br />
       <button type='submit'>Edit category</button>
     </form>

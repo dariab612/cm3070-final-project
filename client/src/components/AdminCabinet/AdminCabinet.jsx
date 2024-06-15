@@ -22,6 +22,7 @@ function AdminCabinet(props) {
         <Link to="/adminchangepass">Change Password</Link>
         <Link to="/admincategories">Admin Categories</Link>
         <Link to="/admincourses">Admin Courses</Link>
+        <Link to="/admincoursevideos">Admin Courses Content</Link>
       </div>
       </>
       : <div>Page not found</div>

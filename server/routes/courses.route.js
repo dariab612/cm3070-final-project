@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const { Course } = require('../db/models');
 const { Category } = require('../db/models');
+const path = require('path');
 
 router.route('/')
   .get((req, res) => {
@@ -9,54 +10,76 @@ router.route('/')
       .catch((error) => console.log(error));
   })
   .post(async (req, res) => {
-    const { name } = req.body.obj;
-    const { pictureName } = req.body.obj;
-    const { categoryName } = req.body.obj;
-    const { description } = req.body.obj;
-
-    const category = await Category.findOne({where: {name: categoryName}})
-
-    if (!category) {
-      return res.status(404).json({ message: 'Category not found' });
+    if (!req.files || Object.keys(req.files).length === 0) {
+      return res.status(400).send('No files were uploaded.');
     }
+    const { name } = req.body;
+    const pictureFile = req.files.picture;
+    const { categoryName } = req.body;
+    const { description } = req.body;
+    const uploadPath = path.join(__dirname, '../..', 'client', 'public', 'images', pictureFile.name);
 
-    await Course.create({
-      name,
-      picture: `/images/${pictureName}.jpg`,
-      categoryId: category.id,
-      description,
-      numberOfVideos: 0,
+    pictureFile.mv(uploadPath, async (err) => {
+      if (err) {
+        return res.status(500).send(err);
+      }
+
+      const category = await Category.findOne({ where: {name: categoryName} })
+
+      if (!category) {
+        return res.status(404).json({ message: 'Category not found' });
+      }
+  
+      await Course.create({
+        name,
+        picture: `/images/${pictureFile.name}`,
+        categoryId: category.id,
+        description,
+        numberOfVideos: 0,
+      })
+      .then((newCourse) => res.status(201).json(newCourse))
+      .catch((error) => res.status(500).json(error));
     })
-    .then((newCourse) => res.status(201).json(newCourse))
-    .catch((error) => res.status(500).json(error));
   })
 router.route('/:id').put( async (req, res) => {
-  const { id } = req.body.obj;
-  const { name } = req.body.obj;
-  const { pictureName } = req.body.obj;
-  const { categoryName } = req.body.obj;
-  const { description } = req.body.obj;
-  try {
-    const category = await Category.findOne({where: {name: categoryName}})
-
-    if (!category) {
-      return res.status(404).json({ message: 'Category not found' });
-    }
-  
-    // eslint-disable-next-line no-unused-vars
-    await Course.update({ 
-      name, 
-      picture: `/images/${pictureName}.jpg`,
-      categoryId: category.id,
-      description
-    }, { where: { id }, raw: true });
-    const changed1 = await Course.findOne({ where: { id }, raw: true });
-    return res.json({ changed1 });
-  } catch (error) {
-    console.error(error);
-
-    return res.status(401).json({ status: false });
+  if (!req.files || Object.keys(req.files).length === 0) {
+    return res.status(400).send('No files were uploaded.');
   }
+
+  const { id } = req.body;
+  const { name } = req.body;
+  const pictureFile = req.files.picture;
+  const { categoryName } = req.body;
+  const { description } = req.body;
+  const uploadPath = path.join(__dirname, '../..', 'client', 'public', 'images', pictureFile.name);
+
+  pictureFile.mv(uploadPath, async (err) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+
+    try {
+      const category = await Category.findOne({where: {name: categoryName}})
+  
+      if (!category) {
+        return res.status(404).json({ message: 'Category not found' });
+      }
+    
+      // eslint-disable-next-line no-unused-vars
+      await Course.update({ 
+        name, 
+        picture: `/images/${pictureFile.name}`,
+        categoryId: category.id,
+        description
+      }, { where: { id }, raw: true });
+      const changed1 = await Course.findOne({ where: { id }, raw: true });
+      return res.json({ changed1 });
+    } catch (error) {
+      console.error(error);
+  
+      return res.status(401).json({ status: false });
+    }
+  })
 })
 .delete( async (req, res) => {
   const { params } = req;
@@ -70,7 +93,7 @@ router.route('/:id').put( async (req, res) => {
       },
       raw: true,
     })
-    // добавь удаление нужных курсов
+    // добавь удаление нужных видео
     return res.json({ deleted: true, id });
   } catch (error) {
     console.error(error);

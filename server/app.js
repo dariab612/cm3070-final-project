@@ -2,6 +2,7 @@ const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
+const fileUpload = require('express-fileupload');
 const session = require('express-session');
 const Filestore = require('session-file-store')(session);
 
@@ -43,6 +44,7 @@ const sessionConfig = {
   },
 };
 
+app.use(fileUpload());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

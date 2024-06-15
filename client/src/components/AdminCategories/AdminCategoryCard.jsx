@@ -6,6 +6,7 @@ import './AdminCategoryCard.css';
 function AdminCategoryCard({ name, picture, id }) {
   const dispatch = useDispatch()
   const [ modal, setModal ] = useState(false)
+  console.log(picture, 'picture')
   return (
     <>
     <div className="category-card">
