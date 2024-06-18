@@ -60,7 +60,13 @@ router.route('/:id')
         },
         raw: true,
       })
-      // добавь удаление нужных курсов
+
+      await Course.destroy({
+        where: {
+          categoryId: id,
+        },
+        raw: true,
+      })
       return res.json({ deleted: true, id });
     } catch (error) {
       console.error(error);

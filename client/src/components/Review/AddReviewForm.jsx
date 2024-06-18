@@ -19,8 +19,6 @@ export function AddReviewForm() {
 
   function addReviewFunc(event) {
     event.preventDefault()
-    const name = event.target.clientReviewName.value
-    const text = event.target.newReviewValue.value
     dispatch({ type: 'ADD_FETCH_REVIEW', payload: { name: name, text: text, isValid: isValid } })
     setName('')
     setText('')

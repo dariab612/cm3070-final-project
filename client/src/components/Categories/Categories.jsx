@@ -1,10 +1,8 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { v4 as uuidv4 } from 'uuid';
 import Category from '../Category/Category';
 
 import './Categories.css';
-
 
 function Categories(props) {
   const categories = useSelector((state) => state.categoriesReducer.categories)
@@ -15,7 +13,7 @@ function Categories(props) {
       <div className="categories-block">
           <h2>Course Categories</h2>
           <div className="categories-main-page">
-              {categories.length ? categories.map((category) => <Category key={uuidv4()} category={category} />) : <p>No categories</p>}
+              {categories.length ? categories.map((category) => <Category key={category.id} category={category} />) : <p>No categories</p>}
           </div>
       </div>
   );

@@ -11,24 +11,25 @@ function AdminReview(props) {
   const dispatch = useDispatch()
   const { reviews } = useSelector(state => state.reviewsReducer)
   const { session } = useSelector((state) => state.sessionReducer)
-  const newReviews = reviews.filter((el) => el.isValid != false)
-  const falseReviews = reviews.filter((el) => el.isValid == false)
+  let newReviews = []
+  if (reviews && reviews.length) {
+    newReviews = reviews.filter((el) => el.isValid !== false)
+  }
 
+  let falseReviews = []
+  if(reviews && reviews.length) {
+    falseReviews = reviews.filter((el) => el.isValid == false)
+  }
 
   useEffect(() => {
-    (async () => {
-      const response = await fetch(`/reviews`)
-      const res = await response.json();
-      dispatch(initReviewsAC({ res }))
-    })();
-  }, [dispatch])
-
+    dispatch({ type: 'GET_FETCH_REVIEW' });
+  }, [dispatch]);
 
   return (
     <div className="admin-reviews-block">
-       { session.isAdmin ?
+       { session && session.isAdmin ?
       <>
-      <h2>Reviews</h2>
+      <h2>Admin Reviews</h2>
       <div className="admin-menu">
         <Link to="/adminreview">Reviews</Link>
         <Link to="/adminchangepass">Change Password</Link>
@@ -43,7 +44,10 @@ function AdminReview(props) {
         </ul>
       </div>
       </> :
-      <div>Page not found</div>
+        <>
+          {console.log(session, 'session && session.isAdmin')}
+          <div>Page not found</div>
+        </>
       }
     </div>
   );

@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const { Course } = require('../db/models');
 const { Category } = require('../db/models');
+const { CourseContent } = require('../db/models');
 const path = require('path');
 
 router.route('/')
@@ -93,7 +94,13 @@ router.route('/:id').put( async (req, res) => {
       },
       raw: true,
     })
-    // добавь удаление нужных видео
+
+    await CourseContent.destroy({
+      where: {
+        courseId: id,
+      },
+      raw: true,
+    })
     return res.json({ deleted: true, id });
   } catch (error) {
     console.error(error);

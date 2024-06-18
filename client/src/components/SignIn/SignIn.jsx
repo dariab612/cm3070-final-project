@@ -9,21 +9,13 @@ function SignIn(props) {
   const clientPhoneInput = useRef();
   const { session } = useSelector((state) => state.sessionReducer)
   const { clientExist, correctPassword } = useSelector((state) => state.signinReducer)
-  async function clientFormHandler(event, clientPassInput, clientPhoneInput) {
+  function clientFormHandler(event, clientPassInput, clientPhoneInput) {
     event.preventDefault();
     try {
-      const response = await fetch('/sign-in', {
-        method: 'POST',
-        headers: { 'Content-Type': 'Application/json' },
-        body: JSON.stringify({
-          password: clientPassInput.current.value,
-          telephone: clientPhoneInput.current.value,
-        })
-
-      })
-      const resJson = await response.json()
-
-      dispatch({ type: 'SIGN_IN', payload: resJson })
+      dispatch({ type: 'FETCH_SIGN_IN', payload: {
+        password: clientPassInput.current.value,
+        telephone: clientPhoneInput.current.value,
+      } })
 
       dispatch({ type: 'SESSION_FETCH' })
     }
@@ -37,10 +29,10 @@ function SignIn(props) {
   return (
     <>
     <h2>Sign In</h2>
-      {!session.authClient ?
+      {!session || !session.authClient ?
         <div className="login-form">
           <input ref={clientPhoneInput} type="phone" name="" id="clientPhone" placeholder='Phone' required />
-          <input ref={clientPassInput} type="password" name="" id="clientPass" placeholder='Пароль' required />
+          <input ref={clientPassInput} type="password" name="" id="clientPass" placeholder='Password' required />
           <button onClick={(event) => clientFormHandler(event, clientPassInput, clientPhoneInput)}>Login</button>
         </div>
         : <p> Authorization was successful </p>}

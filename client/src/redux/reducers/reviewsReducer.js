@@ -9,7 +9,7 @@ const initialState = { reviews: [] }
 export const reviewsReducer = (state = initialState, action) => {
   switch (action.type) {
     case INIT_REVIEWS: {
-      return { ...state, reviews: action.payload.res }
+      return { ...state, reviews: action.payload.reviews }
     }
 
     case DELETE_REVIEW: {

@@ -12,25 +12,17 @@ function SignUp(props) {
   const clientPhoneInput = useRef();
   const { session } = useSelector((state) => state.sessionReducer)
   const { clientExist } = useSelector((state) => state.signupReducer)
-  async function clientFormHandler(event, clientLoginInput, clientPassInput, clientPhoneInput) {
+  function clientFormHandler(event, clientLoginInput, clientPassInput, clientPhoneInput) {
+    console.log(clientLoginInput.current.value, 'clientLoginInput.current.value,')
     event.preventDefault();
 
     try {
-      const response = await fetch('/sign-up', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({
-          login: clientLoginInput.current.value,
-          password: clientPassInput.current.value,
-          telephone: clientPhoneInput.current.value,
-        })
+      dispatch({ type: 'FETCH_SIGN_UP', payload: {
+        login: clientLoginInput.current.value,
+        password: clientPassInput.current.value,
+        telephone: clientPhoneInput.current.value,
+        }
       })
-      const resJson = await response.json()
-
-      dispatch({ type: 'SIGN_UP', payload: resJson })
-
-      dispatch({ type: 'CLIENT_SIGN_UP', payload: { telephone: clientPhoneInput.current.value, password: clientPassInput.current.value } })
     }
 
     catch (err) {
@@ -41,6 +33,11 @@ function SignUp(props) {
     clientPhoneInput.current.value = ''
 
   }
+
+  if (session.authClient) {
+    window.location.href = 'http://localhost:3000/signin';
+  }
+
   return (
     <>
     <h2>Register</h2>
@@ -49,21 +46,14 @@ function SignUp(props) {
           <input ref={clientLoginInput} type="text" name="" id="clientLogin" placeholder="Name" required />
           <input ref={clientPassInput} type="password" name="" id="clientPass" placeholder="Password" required />
           <input ref={clientPhoneInput} type="phone" name="" id="clientPhone" placeholder="Phone" required />
-          <button onClick={(event) => clientFormHandler(event, clientLoginInput, clientPassInput, clientPhoneInput)}>Register</button>
+          <button onClick={(event) => clientFormHandler(event, clientLoginInput, clientPassInput, clientPhoneInput)}>Click to register</button>
         </div>
         :
         <p> Registration completed successfully </p>}
 
-
-      {!clientExist ?
-
-        <div className='max'>{window.location.href = '/signin'}</div>
-
-
-        : clientExist === 'initial' ?
-          <p></p> : <p>This user already exists</p>
-      }
-
+      <div>
+        {!clientExist ? <p>This user already exists</p> : clientExist === 'initial' ? <p></p> : <p></p>}
+      </div>
     </>
   );
 }

@@ -1,5 +1,6 @@
 import { call, put, takeEvery } from 'redux-saga/effects'
 import axios from 'axios';
+import { act } from 'react';
 
 const fetchCategories = async () => {
   const response = await fetch('/categories')
@@ -16,7 +17,7 @@ const fetchCourses = async ({ id }) => {
 
 const fetchAllCourses = async () => {
   const response = await
-  fetch('/courses')
+    fetch('/courses')
   const courses = await response.json()
   return courses
 }
@@ -97,7 +98,7 @@ const fetchEditCategory = async (obj) => {
   try {
     const response = await axios.put('/edit-category', obj, {
       headers: {
-        'Content-Type':  'multipart/form-data'
+        'Content-Type': 'multipart/form-data'
       }
     });
 
@@ -112,7 +113,7 @@ const fetchAddCategory = async (obj) => {
   try {
     const response = await axios.post('/categories', obj, {
       headers: {
-        'Content-Type':  'multipart/form-data'
+        'Content-Type': 'multipart/form-data'
       }
     });
 
@@ -127,7 +128,7 @@ const fetchAddCourse = async (obj) => {
   try {
     const response = await axios.post('/courses', obj, {
       headers: {
-        'Content-Type':  'multipart/form-data'
+        'Content-Type': 'multipart/form-data'
       }
     });
 
@@ -143,7 +144,7 @@ const fetchEditCourse = async (obj) => {
     const id = obj.get('id');
     const response = await axios.put(`/courses/${id}`, obj, {
       headers: {
-        'Content-Type':  'multipart/form-data'
+        'Content-Type': 'multipart/form-data'
       }
     });
 
@@ -173,16 +174,16 @@ const fetchDeleteCourse = async (obj) => {
   })
   const course = await response.json()
   return course
-} 
+}
 
 const fetchCourseVideos = async () => {
   const response = await
-  fetch('/course-content')
+    fetch('/course-content')
   const courses = await response.json()
   return courses
 }
 
-const fetchCourseVideo =  async (obj) => {
+const fetchCourseVideo = async (obj) => {
   const response = await fetch(`/course-content`, {
     method: 'POST',
     headers: { 'Content-Type': 'Application/json' },
@@ -194,7 +195,7 @@ const fetchCourseVideo =  async (obj) => {
   return course
 }
 
-const fetchEditCourseVideo =  async (obj) => {
+const fetchEditCourseVideo = async (obj) => {
   const response = await fetch(`/course-content/${obj.id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'Application/json' },
@@ -206,7 +207,7 @@ const fetchEditCourseVideo =  async (obj) => {
   return course
 }
 
-const fetchDeleteCourseVideo =  async (obj) => {
+const fetchDeleteCourseVideo = async (obj) => {
   const response = await fetch(`/course-content/${obj.id}`, {
     method: 'DELETE',
     headers: { 'Content-Type': 'Application/json' },
@@ -267,10 +268,40 @@ const fetchUpdateOrCreateViewedVideosTotal = async ({ obj }) => {
   return viewed_video
 }
 
-const fetchGetViewedVideos = async({ courseContentId }) => {
+const fetchGetViewedVideos = async ({ courseContentId }) => {
   const response = await fetch(`/viewed-videos?courseContentId=${courseContentId}`)
   const viewedVideos = await response.json()
   return viewedVideos
+}
+
+const fetchGetReviews = async () => {
+  const response = await fetch(`/reviews`)
+  const reviews = await response.json()
+  return reviews
+}
+
+const fetchPostSignUp = async (obj) => {
+  const response = await fetch(`/sign-up`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'Application/json' },
+    body: JSON.stringify({
+      obj,
+    })
+  })
+  const signup = await response.json()
+  return signup
+}
+
+const fetchPostSignIn = async (obj) => {
+  const response = await fetch(`/sign-in`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'Application/json' },
+    body: JSON.stringify({
+      obj,
+    })
+  })
+  const signup = await response.json()
+  return signup
 }
 
 function* getFetchCategories() {
@@ -343,6 +374,22 @@ function* getFetchCourseVideos() {
   yield put({ type: 'INIT_COURSE_CONTENT_LIST', payload: { courseContentList } })
 }
 
+function* getFetchReview() {
+  const reviews = yield call(fetchGetReviews)
+  yield put({ type: 'INIT_REVIEWS', payload: { reviews } })
+}
+
+function* postSignUp(action) {
+  const signup = yield call(fetchPostSignUp(action.payload))
+  yield put({ type: 'SIGN_UP', payload: { signup } })
+}
+
+function* postSignIn(action) {
+  const signin = yield call(fetchPostSignIn(action.payload))
+  yield put({ type: 'SIGN_IN', payload: { signin } })
+}
+
+
 function* addFetchCourseVideo(action) {
   yield call(fetchCourseVideo(action.payload))
 }
@@ -373,7 +420,7 @@ function* updateViewedVideoProgress(action) {
   yield call(fetchUpdateOrCreateViewedVideos, { obj: action.payload })
 }
 
-function* getViewedVideoProgressFetch(action)  {
+function* getViewedVideoProgressFetch(action) {
   const viewedVideos = yield call(fetchGetViewedVideos, { courseContentId: action.payload.courseContentId })
   if (viewedVideos.length) {
     yield put({ type: 'INIT_VIEWED_VIDEO_PROGRESS', payload: { viewedVideos } })
@@ -412,6 +459,9 @@ export function* mySaga() {
   yield takeEvery("ADD_FETCH_COURSE_VIDEO", addFetchCourseVideo);
   yield takeEvery("EDIT_FETCH_COURSE_VIDEO", editFetchCourseVideo);
   yield takeEvery("DELETE_FETCH_COURSE_VIDEO", deleteFetchCourseVideo);
+  yield takeEvery("GET_FETCH_REVIEW", getFetchReview);
+  yield takeEvery("FETCH_SIGN_UP", postSignUp);
+  yield takeEvery("FETCH_SIGN_IN", postSignIn);
 }
 
 export default mySaga;

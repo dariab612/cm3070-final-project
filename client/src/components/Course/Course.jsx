@@ -13,7 +13,7 @@ function Course({ course }) {
       <Link to={`/categories/:categoryname/${coursename}/${id}`}>
       <li><h3>{course.name}</h3></li>
       </Link>
-      <div><strong>Description</strong>: {coursename.description} </div>
+      <div id='course-description'><strong>Description:</strong> {coursename.description}</div>
       <img src={`/${picture}`} alt="" />
     </div>
   );

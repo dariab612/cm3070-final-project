@@ -13,26 +13,25 @@ function Review(props) {
 
   const dispatch = useDispatch()
   const { reviews } = useSelector(state => state.reviewsReducer)
-  const newReviews = reviews.filter((el) => el.isValid !== false)
 
+  let newReviews = []
+  if (reviews && reviews.length) {
+    newReviews = reviews.filter((el) => el.isValid !== false)
+  }
 
   useEffect(() => {
-    (async () => {
-      const response = await fetch(`/reviews`)
-      const res = await response.json();
-      dispatch(initReviewsAC({ res }))
-    })();
-  }, [dispatch])
+    dispatch({ type: 'GET_FETCH_REVIEW' });
+  }, [dispatch]);
 
   return (
     <div className="review-block">
       <h2>Reviews</h2>
       <div className="review-body">
-        {newReviews.map(review => 
+        {newReviews.length ? newReviews.map(review => 
         {
           console.log('review', review)
         return <ReviewCard key={review.id} name={review.name} text={review.text} id={review.id} isValid={review.isValid} />
-        })}
+        }): <p>No reviews</p>}
       </div>
       <AddReviewForm />
     </div>
