@@ -26,6 +26,11 @@ function SignIn(props) {
     clientPassInput.current.value = ''
     clientPhoneInput.current.value = ''
   }
+
+  if (clientExist === true) {
+    window.location.href = 'http://localhost:3000';
+  }
+
   return (
     <>
     <h2>Sign In</h2>

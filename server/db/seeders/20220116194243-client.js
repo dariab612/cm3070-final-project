@@ -9,7 +9,7 @@ module.exports = {
         login: 'Admin', password: generateHashPass('123456789'), telephone: '+79162834244', isAdmin: true, createdAt: new Date(), updatedAt: new Date(),
       },
       {
-        login: 'Daria', password: generateHashPass('00000'), telephone: '+79210000000', isAdmin: false, createdAt: new Date(), updatedAt: new Date(),
+        name: 'Daria', lastname: 'Sukonnova', login: 'Daria', password: generateHashPass('00000'), telephone: '+79210000000', isAdmin: false, createdAt: new Date(), updatedAt: new Date(),
       },
     ]);
   },

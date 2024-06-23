@@ -22,6 +22,15 @@ module.exports = {
       {
         title: "Lesson 4: The Best TUTORIAL Classic Medium Men's Haircut With Scissors", picture: "images/lesson_4_men_haircut.jpg", link: 'https://www.youtube.com/watch?v=h6de0db_6pI', courseId: '2', createdAt: new Date(), updatedAt: new Date(),
       },
+      {
+        title: "Lesson 1: Long One Length Haircut Tutorial Plus Face Frame", picture: "", link: 'https://www.youtube.com/watch?v=wB9TtaXiO_g', courseId: '23', createdAt: new Date(), updatedAt: new Date(),
+      },
+      {
+        title: "Lesson 2: How To Cut The Perfect Face Frame Haircut Everytime", picture: "", link: 'https://www.youtube.com/watch?v=nMQdmEqoC84', courseId: '23', createdAt: new Date(), updatedAt: new Date(),
+      },
+      {
+        title: "Lesson 3: Shaggy Long Bob Haircut Tutorial", picture: "", link: 'https://www.youtube.com/watch?v=k2DcWkHLuGI', courseId: '23', createdAt: new Date(), updatedAt: new Date(),
+      },
     ]);
   },
 

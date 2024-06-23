@@ -10,11 +10,11 @@ const signinReducer = (state = initialState, action) => {
     case "SIGN_IN":
       let copyClientExist = { ...state.clientExist };
       let copyCorrectPassword = { ...state.correctPassword };
-      if (action.payload.clientExist !== undefined) {
-        copyClientExist = action.payload.clientExist;
+      if (action.payload.signin.clientExist !== undefined) {
+        copyClientExist = action.payload.signin.clientExist;
       }
-      if (action.payload.correctPassword !== undefined) {
-        copyCorrectPassword = action.payload.correctPassword;
+      if (action.payload.signin.correctPassword !== undefined) {
+        copyCorrectPassword = action.payload.signin.correctPassword;
       }
       return { ...state, clientExist: copyClientExist, correctPassword: copyCorrectPassword }
 

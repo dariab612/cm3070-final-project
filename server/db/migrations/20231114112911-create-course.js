@@ -26,6 +26,9 @@ module.exports = {
       numberOfVideos: {
         type: Sequelize.INTEGER,
       },
+      certificate: {
+        type: Sequelize.TEXT,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

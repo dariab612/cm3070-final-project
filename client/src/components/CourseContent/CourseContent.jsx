@@ -7,7 +7,6 @@ function CourseContent({ courseContent }) {
   const dispatch = useDispatch();
   const courseContentTitle = courseContent.title;
   const { viewedVideos } = useSelector(state => state.cabinetReducer.viewedVideos);
-
   const [progress, setProgress] = useState(0);
   const [maxProgress, setMaxProgress] = useState(0);
 
@@ -21,6 +20,7 @@ function CourseContent({ courseContent }) {
   const handleProgress = (progress) => {
     setProgress(prevProgress => {
       if (Math.abs(progress.playedSeconds - prevProgress) >= 8) {
+        console.log(24)
         dispatch({ type: 'UPDATE_VIEWED_VIDEO_PROGRESS', payload: { courseContentId: courseContent.id, progress: progress.playedSeconds } });
         return progress.playedSeconds;
       }
@@ -29,6 +29,7 @@ function CourseContent({ courseContent }) {
 
     setMaxProgress(prevProgress => {
       if ((progress.playedSeconds - prevProgress >= 8) || isStopped) {
+        console.log(33)
         isStopped = false
         dispatch({ type: 'UPDATE_VIEWED_VIDEO_MAX_PROGRESS', payload: { courseContentId: courseContent.id, maxProgress: progress.playedSeconds } });
         return progress.playedSeconds;
@@ -60,7 +61,6 @@ function CourseContent({ courseContent }) {
 
   return (
     <div className="course-content" id="course-content-data">
-      {console.log("63")}
       <li>
         <div className="video-container">
           <ReactPlayer  url={courseContent.link}
@@ -74,7 +74,6 @@ function CourseContent({ courseContent }) {
             controls={true}
           />
         </div>
-        {console.log("77")}
         <div>
           <p className="course-title">
             {courseContentTitle}

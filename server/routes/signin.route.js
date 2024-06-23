@@ -4,7 +4,7 @@ const { Client } = require('../db/models');
 
 router.route('/')
   .post(async (req, res) => {
-    const { telephone, password } = req.body;
+    const { telephone, password } = req.body.obj;
     const checkClient = await Client.findOne({
       where: {
         telephone,
@@ -12,18 +12,17 @@ router.route('/')
     });
 
     if (!checkClient) {
-      res.status(401).json({
+      return res.status(401).json({
         message: 'This user does not exist!',
         clientExist: false,
       });
     } else {
       const isCorrectPassword = await bcrypt.compare(password, checkClient.password);
       if (!isCorrectPassword) {
-        res.status(401).json({
+        return res.status(401).json({
           message: 'Password entered incorrectly!',
           correctPassword: false,
         });
-        return;
       }
 
       req.session.user = {
@@ -34,7 +33,7 @@ router.route('/')
         isAdmin: false,
       };
 
-      res.json({ message: 'Authorization was successful!' });
+      return res.json({ message: 'Authorization was successful!', clientExist: true });
     }
   });
 

@@ -31,6 +31,7 @@ route.post('/', async (req, res) => {
         clientNumber
       });
     }
+    console.log(viewedVideo, 'viewedVideo')
     return res.status(200).json(viewedVideo);
   } else {
     return res.status(401).json({ error: 'Unauthorized' });

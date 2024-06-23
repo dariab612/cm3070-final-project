@@ -1,6 +1,5 @@
 import { call, put, takeEvery } from 'redux-saga/effects'
 import axios from 'axios';
-import { act } from 'react';
 
 const fetchCategories = async () => {
   const response = await fetch('/categories')
@@ -153,15 +152,6 @@ const fetchEditCourse = async (obj) => {
     console.error('Error adding course:', error);
     throw error;
   }
-  // const response = await fetch(`/courses/${obj.id}`, {
-  //   method: 'PUT',
-  //   headers: { 'Content-Type': 'Application/json' },
-  //   body: JSON.stringify({
-  //     obj,
-  //   })
-  // })
-  // const course = await response.json()
-  // return course
 }
 
 const fetchDeleteCourse = async (obj) => {
@@ -281,15 +271,22 @@ const fetchGetReviews = async () => {
 }
 
 const fetchPostSignUp = async (obj) => {
-  const response = await fetch(`/sign-up`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'Application/json' },
-    body: JSON.stringify({
-      obj,
+  try {
+    console.log('276')
+    const response = await fetch(`/sign-up`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'Application/json' },
+      body: JSON.stringify({
+        obj,
+      })
     })
-  })
-  const signup = await response.json()
-  return signup
+    console.log(response, 'response')
+    const signup = await response.json()
+    console.log(signup, 'signup')
+    return signup
+  } catch(e) {
+    console.log(e, 'error fetchPostSignUp')
+  }
 }
 
 const fetchPostSignIn = async (obj) => {
@@ -302,6 +299,16 @@ const fetchPostSignIn = async (obj) => {
   })
   const signup = await response.json()
   return signup
+}
+
+const fetchCreateCertificate = async (obj) => {
+  await fetch(`/create-certificate`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'Application/json' },
+    body: JSON.stringify({
+      obj,
+    })
+  })
 }
 
 function* getFetchCategories() {
@@ -340,11 +347,6 @@ function* editFetchCategory(action) {
 }
 
 function* addFetchCategory(action) {
-  console.log(action.payload, 'action.payload')
-
-  for (const pair of action.payload.entries()) {
-    console.log(pair[0], pair[1], 'action.payload ke va');
-  }
   const category = yield call(fetchAddCategory(action.payload))
   yield put({ type: 'ADD_CATEGORY', payload: { category } })
 }
@@ -355,18 +357,15 @@ function* getFetchAllCourses() {
 }
 
 function* addFetchCourse(action) {
-  const courses = yield call(fetchAddCourse(action.payload))
-  yield put({ type: 'ADD_COURSE', payload: { courses } })
+  yield call(fetchAddCourse, action.payload)
 }
 
 function* editFetchCourse(action) {
-  const courses = yield call(fetchEditCourse(action.payload))
-  yield put({ type: 'EDIT_COURSE', payload: { courses } })
+  yield call(fetchEditCourse, action.payload)
 }
 
 function* deleteFetchCourse(action) {
-  const course = yield call(fetchDeleteCourse({ id: action.payload.id }))
-  yield put({ type: 'DELETE_COURSE', payload: { course } })
+  yield call(fetchDeleteCourse, { id: action.payload.id })
 }
 
 function* getFetchCourseVideos() {
@@ -380,15 +379,19 @@ function* getFetchReview() {
 }
 
 function* postSignUp(action) {
-  const signup = yield call(fetchPostSignUp(action.payload))
+  const signup = yield call(fetchPostSignUp, action.payload)
+  
   yield put({ type: 'SIGN_UP', payload: { signup } })
 }
 
 function* postSignIn(action) {
-  const signin = yield call(fetchPostSignIn(action.payload))
+  const signin = yield call(fetchPostSignIn, action.payload)
   yield put({ type: 'SIGN_IN', payload: { signin } })
 }
 
+function* createCertificate(action) {
+  yield call(fetchCreateCertificate, action.payload)
+}
 
 function* addFetchCourseVideo(action) {
   yield call(fetchCourseVideo(action.payload))
@@ -462,6 +465,7 @@ export function* mySaga() {
   yield takeEvery("GET_FETCH_REVIEW", getFetchReview);
   yield takeEvery("FETCH_SIGN_UP", postSignUp);
   yield takeEvery("FETCH_SIGN_IN", postSignIn);
+  yield takeEvery("CREATE_CERTIFICATE", createCertificate);
 }
 
 export default mySaga;

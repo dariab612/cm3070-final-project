@@ -66,6 +66,9 @@ module.exports = {
       },
       {
         name: 'Industrial piercing', picture: 'images/industrial.jpg', categoryId: '8', description: '', createdAt: new Date(), updatedAt: new Date(),
+      },
+      {
+        name: 'General haircut', picture: 'images/generalhaircut.jpg', categoryId: '1', description: '', certificate: 'image/certificate.png', createdAt: new Date(), updatedAt: new Date(),
       }
     ]);
   },

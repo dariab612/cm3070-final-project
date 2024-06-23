@@ -45,6 +45,9 @@ module.exports = (sequelize, DataTypes) => {
     numberOfVideos: {
       type: DataTypes.INTEGER,
     },
+    certificate: {
+      type: DataTypes.TEXT,
+    },
     createdAt: {
       allowNull: false,
       type: DataTypes.DATE,

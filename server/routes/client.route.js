@@ -4,28 +4,28 @@ const { Client } = require('../db/models');
 
 router.route('/')
   .post(async (req, res) => {
-    const { password, telephone, login } = req.body;
+    const { name, lastname, password, telephone, login } = req.body.obj;
     const checkClient = await Client.findOne({
       where: {
         telephone,
       },
     });
 
-
     if (checkClient) {
-      res
+      return res
         .status(409)
-        .json({ clientExist: true, message: 'Such a user is already registered' });
+        .json({ clientExist: true, message: 'Such a user is already registered', clientCreated: false });
     } else {
       const hash = await bcrypt.hash(password, 10);
       await Client.create({
+        name,
+        lastname,
         login,
         password: hash,
         telephone,
         isAdmin: false,
       });
-
-      res.json({ clientExist: false, message: 'Successful registration' });
+      return res.json({ clientExist: false, message: 'Successful registration', clientCreated: true });
     }
   });
 
