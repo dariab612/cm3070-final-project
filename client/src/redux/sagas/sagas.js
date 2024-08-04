@@ -311,6 +311,16 @@ const fetchCreateCertificate = async (obj) => {
   })
 }
 
+const fetchIncreaseCourseWatchers = async (obj) => {
+  await fetch(`courses/${obj.courseId}/number-of-viewers`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'Application/json' },
+    body: JSON.stringify({
+      obj,
+    })
+  })
+}
+
 function* getFetchCategories() {
   const categories = yield call(fetchCategories);
   yield put({ type: "INIT_CATEGORIES", payload: categories });
@@ -393,6 +403,9 @@ function* createCertificate(action) {
   yield call(fetchCreateCertificate, action.payload)
 }
 
+function* increaseCourseWatchers(action) {
+  yield call(fetchIncreaseCourseWatchers, action.payload)
+}
 function* addFetchCourseVideo(action) {
   yield call(fetchCourseVideo(action.payload))
 }
@@ -466,6 +479,7 @@ export function* mySaga() {
   yield takeEvery("FETCH_SIGN_UP", postSignUp);
   yield takeEvery("FETCH_SIGN_IN", postSignIn);
   yield takeEvery("CREATE_CERTIFICATE", createCertificate);
+  yield takeEvery("INCREAUSE_COURSE_WATCHERS_COUNT", increaseCourseWatchers)
 }
 
 export default mySaga;

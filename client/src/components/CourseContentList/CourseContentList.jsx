@@ -21,8 +21,9 @@ function CourseContentList() {
 
   let matchingCourseTitle = currentCourse ? currentCourse.name : null;
 
-  const viewedVideosBoolArray = [];
+  // calculate whether or not we should certify the user
   const viewedVideosArray = [];
+  const viewedVideosBoolArray = [];
 
   if (courseContentList && courseContentList.length) {
     for (const courseContent of courseContentList) {
@@ -36,12 +37,19 @@ function CourseContentList() {
     }
   }
 
-  let notWatchedVideo = viewedVideosBoolArray.find(viewedVideoBoolean => viewedVideoBoolean === false);
+  let notWatchedVideo = viewedVideosBoolArray.some(viewedVideoBoolean => viewedVideoBoolean === false)
   let allowCertificate = false;
+
+  let maxPlayedSecondsTotal = 0
+  let totalSecondsTotal = 0
 
   const finishedViewedVideosArray = [];
   if (!notWatchedVideo) {
     for (const viewedVideo of viewedVideosArray) {
+      // compute the total number of seconds watched and the cumulative seconds across all videos in the course
+      maxPlayedSecondsTotal += viewedVideo.maxPlayedSeconds
+      totalSecondsTotal += viewedVideo.totalSeconds
+
       if (viewedVideo.maxPlayedSeconds) {
         if (viewedVideo.maxPlayedSeconds >= viewedVideo.totalSeconds * 0.85) {
           finishedViewedVideosArray.push(true);
@@ -54,23 +62,24 @@ function CourseContentList() {
     }
   }
 
-  let noFinishedViewedVideo = finishedViewedVideosArray.find(viewedVideoBoolean => viewedVideoBoolean === false);
+  let noFinishedViewedVideo = finishedViewedVideosArray.some(viewedVideoBoolean => viewedVideoBoolean === false);
+  console.log(noFinishedViewedVideo, 'noFinishedViewedVideo')
   if (noFinishedViewedVideo === undefined) {
     allowCertificate = true;
   }
 
+  // Calculate whether maxPlayedSecondsTotal is at least 50% of totalSecondsTotal
+  const isAtLeast50Percent = maxPlayedSecondsTotal >= 0.5 * totalSecondsTotal;
+  if (isAtLeast50Percent) {
+    dispatch({ type: 'INCREAUSE_COURSE_WATCHERS_COUNT', payload: { courseId: id }});
+  }
+
   function onClickHandler(event) {
     event.preventDefault();
-    console.log('Button clicked'); // Debugging line
     dispatch({ type: 'CREATE_CERTIFICATE', payload: { courseId: id }});
     if (currentCourse && currentCourse.certificate) {
       setCertificatePath(currentCourse.certificate);
     }
-  }
-
-  function onClickHandler2(event) {
-    event.preventDefault();
-    console.log('Button clicked 2'); // Debugging line
   }
 
   return (
@@ -80,6 +89,7 @@ function CourseContentList() {
         {courseContentList.length ? courseContentList.map((courseContent) =>
           <CourseContent key={courseContent.id} courseContent={courseContent} />) : <li>No course content</li>}
       </ul>
+      {console.log(allowCertificate, 'allowCertificate')}
       { allowCertificate && (
         <button type="button" onClick={onClickHandler}>Click to receive certificate</button>
       )}
@@ -90,7 +100,6 @@ function CourseContentList() {
         </div>
       )}
 
-    <button type="button" onClick={onClickHandler2}>Click to receive certificate</button>
     </div>
   );
 }

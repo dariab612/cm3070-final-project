@@ -12,7 +12,7 @@ router.route('/')
         },
       });
       const courses = await Course.findAll();
-      
+
       const coursesContent = await CourseContent.findAll();
       
       const courseMap = new Map(courses.map(course => [course.id, course]));

@@ -20,7 +20,6 @@ function CourseContent({ courseContent }) {
   const handleProgress = (progress) => {
     setProgress(prevProgress => {
       if (Math.abs(progress.playedSeconds - prevProgress) >= 8) {
-        console.log(24)
         dispatch({ type: 'UPDATE_VIEWED_VIDEO_PROGRESS', payload: { courseContentId: courseContent.id, progress: progress.playedSeconds } });
         return progress.playedSeconds;
       }
@@ -46,8 +45,6 @@ function CourseContent({ courseContent }) {
   }, [playerRef.current, viewedVideos]);
 
   const handleDuration = (duration) => {
-    console.log(duration, 'duration', courseContent.id)
-
     dispatch({ type: 'UPDATE_VIEWED_VIDEO_TOTAL_SECONDS', payload: { courseContentId: courseContent.id, totalSeconds: duration } });
   }
 
