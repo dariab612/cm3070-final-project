@@ -5,7 +5,7 @@ module.exports = {
         name: "Women's haircut", picture: 'images/womanhaircut.png', categoryId: '1', description: '',  numberOfVideos: 3, createdAt: new Date(), updatedAt: new Date(),
       },
       {
-        name: "Men's haircut", picture: 'images/man.jpg', categoryId: 1, description: '', numberOfVideos: 4, createdAt: new Date(), updatedAt: new Date(),
+        name: "Men's haircut", picture: 'images/man.jpg', categoryId: '1', description: '', numberOfVideos: 4, createdAt: new Date(), updatedAt: new Date(),
       },
       {
         name: 'Clipper haircut', picture: 'images/clipper.jpg', categoryId: '1', description: '', createdAt: new Date(), updatedAt: new Date(),

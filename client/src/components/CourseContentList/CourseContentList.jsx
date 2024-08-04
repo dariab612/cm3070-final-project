@@ -19,6 +19,14 @@ function CourseContentList() {
     dispatch({ type: 'GET_FETCH_COURSE_CONTENT_LIST', payload: { id } });
   }, [dispatch, id]);
 
+  useEffect(() => {dispatch({ type: 'GET_FETCH_ALL_COURSES' })}, [dispatch])
+
+  useEffect(() => {
+    if (currentCourse && currentCourse.certificate) {
+      setCertificatePath(currentCourse.certificate);
+    }
+  }, [currentCourse]);
+
   let matchingCourseTitle = currentCourse ? currentCourse.name : null;
 
   // calculate whether or not we should certify the user
@@ -63,23 +71,19 @@ function CourseContentList() {
   }
 
   let noFinishedViewedVideo = finishedViewedVideosArray.some(viewedVideoBoolean => viewedVideoBoolean === false);
-  console.log(noFinishedViewedVideo, 'noFinishedViewedVideo')
-  if (noFinishedViewedVideo === undefined) {
+  if (noFinishedViewedVideo === false && !notWatchedVideo) {
     allowCertificate = true;
   }
 
-  // Calculate whether maxPlayedSecondsTotal is at least 50% of totalSecondsTotal
-  const isAtLeast50Percent = maxPlayedSecondsTotal >= 0.5 * totalSecondsTotal;
-  if (isAtLeast50Percent) {
-    dispatch({ type: 'INCREAUSE_COURSE_WATCHERS_COUNT', payload: { courseId: id }});
-  }
+  // // Calculate whether maxPlayedSecondsTotal is at least 50% of totalSecondsTotal
+  // const isAtLeast50Percent = maxPlayedSecondsTotal >= 0.5 * totalSecondsTotal;
+  // if (isAtLeast50Percent) {
+  //   dispatch({ type: 'INCREAUSE_COURSE_WATCHERS_COUNT', payload: { courseId: id }});
+  // }
 
   function onClickHandler(event) {
     event.preventDefault();
     dispatch({ type: 'CREATE_CERTIFICATE', payload: { courseId: id }});
-    if (currentCourse && currentCourse.certificate) {
-      setCertificatePath(currentCourse.certificate);
-    }
   }
 
   return (
@@ -89,9 +93,8 @@ function CourseContentList() {
         {courseContentList.length ? courseContentList.map((courseContent) =>
           <CourseContent key={courseContent.id} courseContent={courseContent} />) : <li>No course content</li>}
       </ul>
-      {console.log(allowCertificate, 'allowCertificate')}
-      { allowCertificate && (
-        <button type="button" onClick={onClickHandler}>Click to receive certificate</button>
+      { allowCertificate && !certificatePath && (
+          <button type="button" onClick={onClickHandler}>Click to receive certificate</button>
       )}
       {certificatePath && (
         <div>

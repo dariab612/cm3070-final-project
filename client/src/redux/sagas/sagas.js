@@ -272,7 +272,6 @@ const fetchGetReviews = async () => {
 
 const fetchPostSignUp = async (obj) => {
   try {
-    console.log('276')
     const response = await fetch(`/sign-up`, {
       method: 'POST',
       headers: { 'Content-Type': 'Application/json' },
@@ -280,12 +279,9 @@ const fetchPostSignUp = async (obj) => {
         obj,
       })
     })
-    console.log(response, 'response')
     const signup = await response.json()
-    console.log(signup, 'signup')
     return signup
   } catch(e) {
-    console.log(e, 'error fetchPostSignUp')
   }
 }
 
@@ -330,7 +326,10 @@ function* getFetchCourses(action) {
   const courses = yield call(fetchCourses, { id: action.payload.id })
   yield put({ type: "INIT_COURSES", payload: { courses } })
 }
-
+// function* getFetchCourse (action) {
+//   const course = yield call(fetchCourse, { id: action.payload.id })
+//   yield put({ type: "INIT_COURSES", payload: { courses: [course] } })
+// }
 function* getFetchCourseContentList(action) {
   const courseContentList = yield call(fetchCourseContentList, { id: action.payload.id })
   yield put({ type: 'INIT_COURSE_CONTENT_LIST', payload: { courseContentList } })
@@ -454,6 +453,7 @@ function* updateViewedVideoTotalSeconds(action) {
 export function* mySaga() {
   yield takeEvery('GET_FETCH_CATEGORIES', getFetchCategories);
   yield takeEvery('GET_FETCH_COURSES', getFetchCourses);
+  // yield takeEvery('GET_FETCH_COURSE', getFetchCourse);
   yield takeEvery('GET_FETCH_COURSE_CONTENT_LIST', getFetchCourseContentList)
   yield takeEvery("ADD_FETCH_REVIEW", addFetchReview);
   yield takeEvery("DELETE_FETCH_REVIEW", deleteFetchReview);
