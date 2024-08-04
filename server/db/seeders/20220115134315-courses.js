@@ -2,7 +2,7 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.bulkInsert('Courses', [
       {
-        name: "Women's haircut", picture: 'images/womanhaircut.png', categoryId: '1', description: '',  numberOfVideos: 3, createdAt: new Date(), updatedAt: new Date(),
+        name: "Women's haircut", picture: 'images/womanhaircut.png', categoryId: '1', description: '',  numberOfVideos: 3, isCertified: true, createdAt: new Date(), updatedAt: new Date(),
       },
       {
         name: "Men's haircut", picture: 'images/man.jpg', categoryId: '1', description: '', numberOfVideos: 4, createdAt: new Date(), updatedAt: new Date(),
@@ -68,7 +68,7 @@ module.exports = {
         name: 'Industrial piercing', picture: 'images/industrial.jpg', categoryId: '8', description: '', createdAt: new Date(), updatedAt: new Date(),
       },
       {
-        name: 'General haircut', picture: 'images/generalhaircut.jpg', categoryId: '1', description: '', certificate: 'image/certificate.png', createdAt: new Date(), updatedAt: new Date(),
+        name: 'General haircut', picture: 'images/generalhaircut.jpg', categoryId: '1', description: '', certificate: 'image/certificate.png', isCertified: true, createdAt: new Date(), updatedAt: new Date(),
       }
     ]);
   },

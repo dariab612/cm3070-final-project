@@ -48,6 +48,10 @@ module.exports = (sequelize, DataTypes) => {
     certificate: {
       type: DataTypes.TEXT,
     },
+    isCertified : {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
     createdAt: {
       allowNull: false,
       type: DataTypes.DATE,

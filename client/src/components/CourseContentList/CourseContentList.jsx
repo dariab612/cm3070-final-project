@@ -14,7 +14,7 @@ function CourseContentList() {
   const [certificatePath, setCertificatePath] = useState(null);
 
   const currentCourse = courses && courses.length ? courses.find(course => course.id === Number(id)) : null;
-
+ 
   useEffect(() => {
     dispatch({ type: 'GET_FETCH_COURSE_CONTENT_LIST', payload: { id } });
   }, [dispatch, id]);
@@ -30,49 +30,52 @@ function CourseContentList() {
   let matchingCourseTitle = currentCourse ? currentCourse.name : null;
 
   // calculate whether or not we should certify the user
-  const viewedVideosArray = [];
-  const viewedVideosBoolArray = [];
-
-  if (courseContentList && courseContentList.length) {
-    for (const courseContent of courseContentList) {
-      let viewedCourseContent = viewedVideos && viewedVideos.length ? viewedVideos.find(video => video.courseContentId === courseContent.id) : null;
-      if (viewedCourseContent) {
-        viewedVideosBoolArray.push(true);
-        viewedVideosArray.push(viewedCourseContent);
-      } else {
-        viewedVideosBoolArray.push(false);
-      }
-    }
-  }
-
-  let notWatchedVideo = viewedVideosBoolArray.some(viewedVideoBoolean => viewedVideoBoolean === false)
   let allowCertificate = false;
 
-  let maxPlayedSecondsTotal = 0
-  let totalSecondsTotal = 0
-
-  const finishedViewedVideosArray = [];
-  if (!notWatchedVideo) {
-    for (const viewedVideo of viewedVideosArray) {
-      // compute the total number of seconds watched and the cumulative seconds across all videos in the course
-      maxPlayedSecondsTotal += viewedVideo.maxPlayedSeconds
-      totalSecondsTotal += viewedVideo.totalSeconds
-
-      if (viewedVideo.maxPlayedSeconds) {
-        if (viewedVideo.maxPlayedSeconds >= viewedVideo.totalSeconds * 0.85) {
-          finishedViewedVideosArray.push(true);
+  if (currentCourse && currentCourse.isCertified) {
+    const viewedVideosArray = [];
+    const viewedVideosBoolArray = [];
+  
+    if (courseContentList && courseContentList.length) {
+      for (const courseContent of courseContentList) {
+        let viewedCourseContent = viewedVideos && viewedVideos.length ? viewedVideos.find(video => video.courseContentId === courseContent.id) : null;
+        if (viewedCourseContent) {
+          viewedVideosBoolArray.push(true);
+          viewedVideosArray.push(viewedCourseContent);
+        } else {
+          viewedVideosBoolArray.push(false);
+        }
+      }
+    }
+  
+    let notWatchedVideo = viewedVideosBoolArray.some(viewedVideoBoolean => viewedVideoBoolean === false)
+  
+    let maxPlayedSecondsTotal = 0
+    let totalSecondsTotal = 0
+  
+    const finishedViewedVideosArray = [];
+    if (!notWatchedVideo) {
+      for (const viewedVideo of viewedVideosArray) {
+        // compute the total number of seconds watched and the cumulative seconds across all videos in the course
+        maxPlayedSecondsTotal += viewedVideo.maxPlayedSeconds
+        totalSecondsTotal += viewedVideo.totalSeconds
+  
+        if (viewedVideo.maxPlayedSeconds) {
+          if (viewedVideo.maxPlayedSeconds >= viewedVideo.totalSeconds * 0.85) {
+            finishedViewedVideosArray.push(true);
+          } else {
+            finishedViewedVideosArray.push(false);
+          }
         } else {
           finishedViewedVideosArray.push(false);
         }
-      } else {
-        finishedViewedVideosArray.push(false);
       }
     }
-  }
-
-  let noFinishedViewedVideo = finishedViewedVideosArray.some(viewedVideoBoolean => viewedVideoBoolean === false);
-  if (noFinishedViewedVideo === false && !notWatchedVideo) {
-    allowCertificate = true;
+  
+    let noFinishedViewedVideo = finishedViewedVideosArray.some(viewedVideoBoolean => viewedVideoBoolean === false);
+    if (noFinishedViewedVideo === false && !notWatchedVideo) {
+      allowCertificate = true;
+    }
   }
 
   // // Calculate whether maxPlayedSecondsTotal is at least 50% of totalSecondsTotal

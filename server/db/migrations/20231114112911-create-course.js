@@ -29,6 +29,10 @@ module.exports = {
       certificate: {
         type: Sequelize.TEXT,
       },
+      isCertified : {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

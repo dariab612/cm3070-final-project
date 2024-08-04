@@ -18,6 +18,7 @@ router.route('/')
     const pictureFile = req.files.picture;
     const { categoryName } = req.body;
     const { description } = req.body;
+    const { isCertified } = req.body;
     const uploadPath = path.join(__dirname, '../..', 'client', 'public', 'images', pictureFile.name);
 
     pictureFile.mv(uploadPath, async (err) => {
@@ -37,6 +38,7 @@ router.route('/')
         categoryId: category.id,
         description,
         numberOfVideos: 0,
+        isCertified,
       })
       .then((newCourse) => res.status(201).json(newCourse))
       .catch((error) => res.status(500).json(error));
@@ -52,6 +54,7 @@ router.route('/:id').put( async (req, res) => {
   const pictureFile = req.files.picture;
   const { categoryName } = req.body;
   const { description } = req.body;
+  const { isCertified } = req.body;
   const uploadPath = path.join(__dirname, '../..', 'client', 'public', 'images', pictureFile.name);
 
   pictureFile.mv(uploadPath, async (err) => {
@@ -71,7 +74,8 @@ router.route('/:id').put( async (req, res) => {
         name, 
         picture: `/images/${pictureFile.name}`,
         categoryId: category.id,
-        description
+        description,
+        isCertified
       }, { where: { id }, raw: true });
       const changed1 = await Course.findOne({ where: { id }, raw: true });
       return res.json({ changed1 });
