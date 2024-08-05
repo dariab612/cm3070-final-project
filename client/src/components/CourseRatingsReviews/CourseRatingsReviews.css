@@ -1,0 +1,85 @@
+.course-ratings-reviews {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.courseInfo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 80px;
+  margin-top: 60px;
+}
+
+.course-ratings-reviews img {
+  width: 350px;
+  height: 350px;
+  object-fit: cover;
+  object-position: center top;
+  border-radius: 8px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+.headerContainer {
+  margin-bottom: 140px;
+}
+
+.headerContainer h2{
+  margin-top: 5px;
+  margin-bottom: 0px;
+}
+
+#ratings-paragraph {
+  margin:0;
+  color: grey;
+  font-weight: medium;
+  font-family: 'Michroma', sans-serif;
+}
+
+#star-container {
+  display: flex;
+  align-items: top;
+}
+
+#average-rating {
+  color: black;
+  font-size: 20px;
+  margin-left: 15px;
+  margin-top: 9.6px;
+  font-family: 'Michroma', sans-serif;
+}
+
+#course-description {
+  margin-top: 30px;
+  width: 500px;
+}
+
+.course-ratings-reviews form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#course-header-rating-and-reviews-page {
+  text-align: left;
+}
+.course-ratings-reviews label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.course-ratings-reviews textarea {
+  width: 100%;
+  height: 100px;
+  resize: vertical;
+}
+
+.course-ratings-reviews button {
+  align-self: flex-start;
+}
+
+

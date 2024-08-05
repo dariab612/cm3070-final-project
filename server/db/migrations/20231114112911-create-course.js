@@ -48,13 +48,23 @@ module.exports = {
         defaultValue: [],
         allowNull: false,
       },
-      ratingsCounter : {
+      ratingsCounter: {
         type: Sequelize.INTEGER,
         defaultValue: 0,
         allowNull: false,
       },
-      averageRating : {
+      averageRating: {
         type: Sequelize.FLOAT,
+        defaultValue: 0,
+        allowNull: false,
+      },
+      reviews: {
+        type: Sequelize.JSONB,
+        defaultValue: [],
+        allowNull: false,
+      },
+      reviewsCounter: {
+        type: Sequelize.INTEGER,
         defaultValue: 0,
         allowNull: false,
       },

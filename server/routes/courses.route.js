@@ -155,8 +155,8 @@ router.route('/:id/number-of-viewers').put( async (req, res) => {
     return res.status(401).json({ deleted: false });
   }
 })
-router.route('/:id/rating-and-review').put( async (req, res) => {
-  const { courseId, rating } = req.body.obj;
+router.route('/:id/rating-and-review').put(async (req, res) => {
+  const { courseId, rating, review } = req.body.obj;
 
   let client;
   if (req.session && req.session.user) {
@@ -173,32 +173,42 @@ router.route('/:id/rating-and-review').put( async (req, res) => {
   }
 
   try {
-    const course = await Course.findOne({where: {id: courseId}})
-    
+    const course = await Course.findOne({ where: { id: courseId } });
+
     if (!course) {
       return res.status(404).json({ message: 'Course not found' });
     }
-    
-    const currentRatings = Array.isArray(course.ratings) ? {} : course.ratings;
-    // Check if the client's telephone is already a key in the ratings
-    if (currentRatings.hasOwnProperty(client.telephone)) {
-      return res.status(400).json({ message: 'Rating already exists for this client' });
-    }
+
+    // Ratings
+    const currentRatings = Array.isArray(course.ratings) ? {} : course.ratings || {};
+    const userHasRated = currentRatings.hasOwnProperty(client.telephone);
 
     currentRatings[client.telephone] = Number(rating);
 
-    const newRatingsCounter = course.ratingsCounter + 1;
-
-    // Calculate average rating from course.ratings
+    // Calculate average rating
     const ratingValues = Object.values(currentRatings);
-    const averageRating = ratingValues.length 
+    const averageRating = ratingValues.length
       ? ratingValues.reduce((acc, val) => acc + val, 0) / ratingValues.length
       : 0;
+
+    // Reviews
+    const currentReviews = Array.isArray(course.reviews) ? {} : course.reviews || {};
+    const userHasReviewed = currentReviews.hasOwnProperty(client.telephone);
+
+    if (review !== '') {
+      currentReviews[client.telephone] = review;
+    }
+
+    // Update counters if the user hasn't rated or reviewed before
+    const newRatingsCounter = userHasRated ? course.ratingsCounter : course.ratingsCounter + 1;
+    const newReviewsCounter = (review !== '' && !userHasReviewed) ? course.reviewsCounter + 1 : course.reviewsCounter;
 
     await Course.update({
       ratings: currentRatings,
       ratingsCounter: newRatingsCounter,
-      averageRating: averageRating
+      averageRating: averageRating,
+      reviews: currentReviews,
+      reviewsCounter: newReviewsCounter,
     }, { where: { id: course.id }, raw: true });
 
     const updatedCourse = await Course.findOne({ where: { id: course.id }, raw: true });
@@ -206,9 +216,9 @@ router.route('/:id/rating-and-review').put( async (req, res) => {
     return res.json({ updatedCourse });
   } catch (error) {
     console.error(error);
-
     return res.status(401).json({ deleted: false });
   }
-})
+});
+
 
 module.exports = router;
