@@ -155,5 +155,60 @@ router.route('/:id/number-of-viewers').put( async (req, res) => {
     return res.status(401).json({ deleted: false });
   }
 })
-  
+router.route('/:id/rating-and-review').put( async (req, res) => {
+  const { courseId, rating } = req.body.obj;
+
+  let client;
+  if (req.session && req.session.user) {
+    client = await Client.findOne({
+      where: {
+        telephone: req.session.user.telephone,
+      },
+      raw: true
+    });
+  }
+
+  if (!(client && client.login && client.telephone)) {
+    return res.status(404).send('Client not found');
+  }
+
+  try {
+    const course = await Course.findOne({where: {id: courseId}})
+    
+    if (!course) {
+      return res.status(404).json({ message: 'Course not found' });
+    }
+    
+    const currentRatings = Array.isArray(course.ratings) ? {} : course.ratings;
+    // Check if the client's telephone is already a key in the ratings
+    if (currentRatings.hasOwnProperty(client.telephone)) {
+      return res.status(400).json({ message: 'Rating already exists for this client' });
+    }
+
+    currentRatings[client.telephone] = Number(rating);
+
+    const newRatingsCounter = course.ratingsCounter + 1;
+
+    // Calculate average rating from course.ratings
+    const ratingValues = Object.values(currentRatings);
+    const averageRating = ratingValues.length 
+      ? ratingValues.reduce((acc, val) => acc + val, 0) / ratingValues.length
+      : 0;
+
+    await Course.update({
+      ratings: currentRatings,
+      ratingsCounter: newRatingsCounter,
+      averageRating: averageRating
+    }, { where: { id: course.id }, raw: true });
+
+    const updatedCourse = await Course.findOne({ where: { id: course.id }, raw: true });
+
+    return res.json({ updatedCourse });
+  } catch (error) {
+    console.error(error);
+
+    return res.status(401).json({ deleted: false });
+  }
+})
+
 module.exports = router;

@@ -62,6 +62,21 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: [],
       allowNull: false,
     },
+    ratings: {
+      type: DataTypes.JSONB,
+      defaultValue: [],
+      allowNull: false,
+    },
+    ratingsCounter : {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+      allowNull: false,
+    },
+    averageRating : {
+      type: DataTypes.FLOAT,
+      defaultValue: 0,
+      allowNull: false,
+    },
     createdAt: {
       allowNull: false,
       type: DataTypes.DATE,

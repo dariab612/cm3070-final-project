@@ -12,9 +12,36 @@
 }
 
 .course-card img {
-  width: 100%;
+  width: 350px;
+  height: 350px;
+  object-fit: cover;
+  object-position: center top;
 }
 
 .course-title {
   cursor: pointer;
+}
+
+.star-inner {
+  font-size: 2rem;
+  color: gold;
+}
+
+.star-outer {
+  font-size: 2rem;
+  color: lightgrey;
+}
+
+.star-container {
+  display: flex;
+  align-items: center;
+}
+
+.ratings-paragraph {
+  margin-left: 10px;
+  color: grey;
+}
+
+.ratings-paragraph:hover {
+  text-decoration: underline;
 }

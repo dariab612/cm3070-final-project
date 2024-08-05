@@ -317,6 +317,16 @@ const fetchIncreaseCourseWatchers = async (obj) => {
   })
 }
 
+const fetchAddReviewRating = async (obj) => {
+  await fetch(`/courses/${obj.courseId}/rating-and-review`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'Application/json' },
+    body: JSON.stringify({
+      obj,
+    })
+  })
+}
+
 function* getFetchCategories() {
   const categories = yield call(fetchCategories);
   yield put({ type: "INIT_CATEGORIES", payload: categories });
@@ -326,10 +336,7 @@ function* getFetchCourses(action) {
   const courses = yield call(fetchCourses, { id: action.payload.id })
   yield put({ type: "INIT_COURSES", payload: { courses } })
 }
-// function* getFetchCourse (action) {
-//   const course = yield call(fetchCourse, { id: action.payload.id })
-//   yield put({ type: "INIT_COURSES", payload: { courses: [course] } })
-// }
+
 function* getFetchCourseContentList(action) {
   const courseContentList = yield call(fetchCourseContentList, { id: action.payload.id })
   yield put({ type: 'INIT_COURSE_CONTENT_LIST', payload: { courseContentList } })
@@ -405,6 +412,11 @@ function* createCertificate(action) {
 function* increaseCourseWatchers(action) {
   yield call(fetchIncreaseCourseWatchers, action.payload)
 }
+
+function* addReviewRating(action) {
+  yield call(fetchAddReviewRating, action.payload)
+}
+
 function* addFetchCourseVideo(action) {
   yield call(fetchCourseVideo(action.payload))
 }
@@ -479,6 +491,7 @@ export function* mySaga() {
   yield takeEvery("FETCH_SIGN_IN", postSignIn);
   yield takeEvery("CREATE_CERTIFICATE", createCertificate);
   yield takeEvery("INCREAUSE_COURSE_WATCHERS_COUNT", increaseCourseWatchers)
+  yield takeEvery("ADD_REVIEW_AND_RATING", addReviewRating)
 }
 
 export default mySaga;

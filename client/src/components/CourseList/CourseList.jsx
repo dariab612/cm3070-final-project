@@ -14,6 +14,7 @@ function CourseList() {
   const [certifiedOnly, setCertifiedOnly] = useState(false);
   const [sortNewest, setSortNewest] = useState(false);
   const [sortPopular, setSortPopular] = useState(false);
+  const [sortFavourites, setSortFavourites] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   useEffect(() => {
@@ -34,7 +35,7 @@ function CourseList() {
       if (filtered.length) {
         filtered = filtered.sort((a, b) => a.id - b.id); 
       }
-    
+  
       if (searchTerm) {
         filtered = filtered.filter(course =>
           course.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -45,12 +46,32 @@ function CourseList() {
         filtered = filtered.filter(course => course.isCertified);
       }
 
-      if (sortNewest) {
-        filtered = filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      }
+      if (sortFavourites) {
+        filtered = filtered.sort((a, b) => {
+          const aAvgRating = a.averageRating || 0;
+          const bAvgRating = b.averageRating || 0;
 
-      if (sortPopular) {
-        filtered = filtered.sort((a, b) => b.viewersCounter - a.viewersCounter);
+          if (a.ratingsCounter >= 5 && b.ratingsCounter >= 5) {
+            if (aAvgRating >= 3.5 && bAvgRating >= 3.5) {
+              return bAvgRating - aAvgRating;
+            }
+            if (aAvgRating >= 3.5) return -1;
+            if (bAvgRating >= 3.5) return 1;
+            return bAvgRating - aAvgRating;
+          }
+
+          if (a.ratingsCounter >= 5) return -1;
+          if (b.ratingsCounter >= 5) return 1;
+          return bAvgRating - aAvgRating;
+        });
+      } else {
+        if (sortNewest) {
+          filtered = filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        }
+
+        if (sortPopular) {
+          filtered = filtered.sort((a, b) => b.viewersCounter - a.viewersCounter);
+        }
       }
 
       setFilteredCourses(filtered);
@@ -59,7 +80,7 @@ function CourseList() {
     filterCourses();
 
     forceUpdate();
-  }, [courses, searchTerm, certifiedOnly, sortNewest, sortPopular]);
+  }, [courses, searchTerm, certifiedOnly, sortNewest, sortPopular, sortFavourites]);
 
   return (
     <div>
@@ -104,12 +125,21 @@ function CourseList() {
             />
             Popular
           </label>
+          <label>
+            <input
+              type="checkbox"
+              checked={sortFavourites}
+              onChange={(e) => setSortFavourites(e.target.checked)}
+            />
+            Favourites
+          </label>
         </div>
       )}
       <ul className="course-list">
         {filteredCourses.length ? (
-          filteredCourses.map(course => {
-            return <Course key={uuidv4()} course={course} />})
+          filteredCourses.map(course => (
+            <Course key={uuidv4()} course={course} />
+          ))
         ) : (
           <li>No courses</li>
         )}
