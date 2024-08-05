@@ -2,6 +2,7 @@ const router = require('express').Router();
 const { Course } = require('../db/models');
 const { Category } = require('../db/models');
 const { CourseContent } = require('../db/models');
+const { Client } = require('../db/models');
 const path = require('path');
 
 router.route('/')
@@ -106,6 +107,48 @@ router.route('/:id').put( async (req, res) => {
       raw: true,
     })
     return res.json({ deleted: true, id });
+  } catch (error) {
+    console.error(error);
+
+    return res.status(401).json({ deleted: false });
+  }
+})
+router.route('/:id/number-of-viewers').put( async (req, res) => {
+  const { courseId } = req.body.obj;
+
+  let client;
+  if (req.session && req.session.user) {
+    client = await Client.findOne({
+      where: {
+        telephone: req.session.user.telephone,
+      },
+      raw: true
+    });
+  }
+
+  if (!(client && client.login && client.telephone)) {
+    return res.status(404).send('Client not found');
+  }
+  
+  try {
+    const course = await Course.findOne({where: {id: courseId}})
+    
+    if (!course) {
+      return res.status(404).json({ message: 'Course not found' });
+    }
+
+    if (!course.viewers.includes(client.telephone)) {
+      course.viewers.push(client.telephone);
+      const newViewersCounter = course.viewersCounter + 1;
+
+      await Course.update({
+        viewersCounter: newViewersCounter,
+        viewers: course.viewers,
+      }, { where: { id: course.id }, raw: true });
+    }
+
+    const updatedCourse = await Course.findOne({ where: { id: course.id }, raw: true });
+    return res.json({ updatedCourse });
   } catch (error) {
     console.error(error);
 

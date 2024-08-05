@@ -13,8 +13,9 @@ function CourseList() {
   const [filteredCourses, setFilteredCourses] = useState([]);
   const [certifiedOnly, setCertifiedOnly] = useState(false);
   const [sortNewest, setSortNewest] = useState(false);
+  const [sortPopular, setSortPopular] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
-  console.log(courses, 'courses')
+
   useEffect(() => {
     dispatch({ type: 'GET_FETCH_COURSES', payload: { id } });
   }, [dispatch, id]);
@@ -29,7 +30,7 @@ function CourseList() {
   useEffect(() => {
     const filterCourses = () => {
       let filtered = courses || [];
-      console.log(sortNewest, 'sortNewest')
+
       if (filtered.length) {
         filtered = filtered.sort((a, b) => a.id - b.id); 
       }
@@ -48,13 +49,17 @@ function CourseList() {
         filtered = filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       }
 
+      if (sortPopular) {
+        filtered = filtered.sort((a, b) => b.viewersCounter - a.viewersCounter);
+      }
+
       setFilteredCourses(filtered);
     };
 
     filterCourses();
 
     forceUpdate();
-  }, [courses, searchTerm, certifiedOnly, sortNewest]);
+  }, [courses, searchTerm, certifiedOnly, sortNewest, sortPopular]);
 
   return (
     <div>
@@ -90,6 +95,14 @@ function CourseList() {
               onChange={(e) => setSortNewest(e.target.checked)}
             />
             Newest first
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              checked={sortPopular}
+              onChange={(e) => setSortPopular(e.target.checked)}
+            />
+            Popular
           </label>
         </div>
       )}

@@ -308,7 +308,7 @@ const fetchCreateCertificate = async (obj) => {
 }
 
 const fetchIncreaseCourseWatchers = async (obj) => {
-  await fetch(`courses/${obj.courseId}/number-of-viewers`, {
+  await fetch(`/courses/${obj.courseId}/number-of-viewers`, {
     method: 'PUT',
     headers: { 'Content-Type': 'Application/json' },
     body: JSON.stringify({
@@ -453,7 +453,6 @@ function* updateViewedVideoTotalSeconds(action) {
 export function* mySaga() {
   yield takeEvery('GET_FETCH_CATEGORIES', getFetchCategories);
   yield takeEvery('GET_FETCH_COURSES', getFetchCourses);
-  // yield takeEvery('GET_FETCH_COURSE', getFetchCourse);
   yield takeEvery('GET_FETCH_COURSE_CONTENT_LIST', getFetchCourseContentList)
   yield takeEvery("ADD_FETCH_REVIEW", addFetchReview);
   yield takeEvery("DELETE_FETCH_REVIEW", deleteFetchReview);

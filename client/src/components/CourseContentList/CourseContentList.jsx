@@ -8,7 +8,6 @@ function CourseContentList() {
   const courses = useSelector(state => state.coursesReducer.courses);
   const courseContentList = useSelector(state => state.courseContentListReducer.courseContentList);
   const { viewedVideos } = useSelector(state => state.cabinetReducer.viewedVideos);
-
   const dispatch = useDispatch();
   const { id } = useParams();
   const [certificatePath, setCertificatePath] = useState(null);
@@ -50,16 +49,9 @@ function CourseContentList() {
   
     let notWatchedVideo = viewedVideosBoolArray.some(viewedVideoBoolean => viewedVideoBoolean === false)
   
-    let maxPlayedSecondsTotal = 0
-    let totalSecondsTotal = 0
-  
     const finishedViewedVideosArray = [];
     if (!notWatchedVideo) {
       for (const viewedVideo of viewedVideosArray) {
-        // compute the total number of seconds watched and the cumulative seconds across all videos in the course
-        maxPlayedSecondsTotal += viewedVideo.maxPlayedSeconds
-        totalSecondsTotal += viewedVideo.totalSeconds
-  
         if (viewedVideo.maxPlayedSeconds) {
           if (viewedVideo.maxPlayedSeconds >= viewedVideo.totalSeconds * 0.85) {
             finishedViewedVideosArray.push(true);
@@ -78,16 +70,38 @@ function CourseContentList() {
     }
   }
 
-  // // Calculate whether maxPlayedSecondsTotal is at least 50% of totalSecondsTotal
-  // const isAtLeast50Percent = maxPlayedSecondsTotal >= 0.5 * totalSecondsTotal;
-  // if (isAtLeast50Percent) {
-  //   dispatch({ type: 'INCREAUSE_COURSE_WATCHERS_COUNT', payload: { courseId: id }});
-  // }
-
   function onClickHandler(event) {
     event.preventDefault();
     dispatch({ type: 'CREATE_CERTIFICATE', payload: { courseId: id }});
   }
+
+  // Calculate whether maxPlayedSecondsTotal is at least 50% of totalSecondsTotal (for Popular filter)
+  const viewedVideosArray = [];
+
+  useEffect(() => {
+    if (courseContentList && courseContentList.length) {
+      for (const courseContent of courseContentList) {
+        let viewedCourseContent = viewedVideos && viewedVideos.length ? viewedVideos.find(video => video.courseContentId === courseContent.id) : null;
+        if (viewedCourseContent) {
+          viewedVideosArray.push(viewedCourseContent);
+        }
+      }
+
+      let maxPlayedSecondsTotal = 0;
+      let totalSecondsTotal = 0;
+
+      for (const viewedVideo of viewedVideosArray) {
+        maxPlayedSecondsTotal += viewedVideo.maxPlayedSeconds || 0;
+        totalSecondsTotal += viewedVideo.totalSeconds || 0;
+      }
+
+      const isAtLeast50Percent = maxPlayedSecondsTotal >= 0.5 * totalSecondsTotal;
+      if (isAtLeast50Percent) {
+        dispatch({ type: 'INCREAUSE_COURSE_WATCHERS_COUNT', payload: { courseId: id } });
+      }
+    }
+  }, [courseContentList, viewedVideos, dispatch, id]);
+
 
   return (
     <div>
