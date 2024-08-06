@@ -13,7 +13,7 @@ function AdminCourseCard({ name, picture, id, description, categoryId }) {
     <>
     <div className="course-card">
         <h3>{name}</h3>
-        <p>Description: {description}</p>
+        <p>{description}</p>
         <img src={picture} alt="course-img" />
         <button onClick={() => dispatch({ type: 'DELETE_FETCH_COURSE', payload: { id } })}>Delete course</button>
         <button onClick={() => setModal(!modal)}>Edit course</button>
