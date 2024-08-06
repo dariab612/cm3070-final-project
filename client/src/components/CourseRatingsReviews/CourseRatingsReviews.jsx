@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
-
 import './CourseRatingsReviews.css';
 
 function CourseRatingsReviews() {
@@ -10,8 +9,17 @@ function CourseRatingsReviews() {
   const dispatch = useDispatch();
   const currentCourse = courses && courses.length ? courses.find(course => course.id === Number(courseId)) : null;
 
+  const { session } = useSelector((state) => state.sessionReducer);
+
+  const clients = useSelector(state => state.clientsReducer.clients);
+  console.log(clients, 'clients')
+
   useEffect(() => {
     dispatch({ type: 'GET_FETCH_ALL_COURSES' });
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch({ type: 'GET_FETCH_ALL_CLIENTS' });
   }, [dispatch]);
 
   const [rating, setRating] = useState('5');
@@ -63,13 +71,19 @@ function CourseRatingsReviews() {
                 </p>
               </div>
               <p id="ratings-paragraph">
-                  {currentCourse.ratingsCounter ?  currentCourse.ratingsCounter === 1 ? `${currentCourse.ratingsCounter} rating` : `${currentCourse.ratingsCounter} ratings` : 'No ratings yet'}
+                {currentCourse.ratingsCounter
+                  ? currentCourse.ratingsCounter === 1
+                    ? `${currentCourse.ratingsCounter} rating`
+                    : `${currentCourse.ratingsCounter} ratings`
+                  : 'No ratings yet'}
               </p>
               <p id="course-description">
                 {currentCourse.description}
               </p>
             </div>
           </div>
+
+          <h3 className="form-header">What do you think?</h3>
           <form onSubmit={handleSubmit}>
             <label>
               Rating:
@@ -91,6 +105,23 @@ function CourseRatingsReviews() {
             </label>
             <button type="submit">Submit Rating & Review</button>
           </form>
+
+          {Object.keys(currentCourse.reviews).length > 0 && (
+            <div className="reviews-section">
+              <h3>Reviews</h3>
+              {Object.entries(currentCourse.reviews).map(([user, userReview]) => (
+                <div key={user} className="review">
+                  <div className="review-rating">
+                    {generateStars(currentCourse.ratings[user])}
+                  </div>
+                  <div className="review-details">
+                    <p className="review-login">{session.login ? session.login : 'Unknown User'}</p>
+                    <p className="review-text">{userReview}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       ) : (
         <p>Loading...</p>

@@ -28,5 +28,4 @@ router.route('/')
       return res.json({ clientExist: false, message: 'Successful registration', clientCreated: true });
     }
   });
-
 module.exports = router;

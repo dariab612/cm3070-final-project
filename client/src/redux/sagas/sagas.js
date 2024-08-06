@@ -327,6 +327,16 @@ const fetchAddReviewRating = async (obj) => {
   })
 }
 
+const fetchGetAllClients = async () => {
+  const response = await fetch(`/clients`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'Application/json' },
+  })
+  const clients = await response.json()
+  console.log(clients, 'clients 336')
+  return clients
+}
+
 function* getFetchCategories() {
   const categories = yield call(fetchCategories);
   yield put({ type: "INIT_CATEGORIES", payload: categories });
@@ -417,6 +427,11 @@ function* addReviewRating(action) {
   yield call(fetchAddReviewRating, action.payload)
 }
 
+function* getFetchAllClients(action) {
+  const clients = yield call(fetchGetAllClients, action.payload)
+  yield put({ type: 'INIT_CLIENTS', payload: { clients } })
+}
+
 function* addFetchCourseVideo(action) {
   yield call(fetchCourseVideo(action.payload))
 }
@@ -492,6 +507,7 @@ export function* mySaga() {
   yield takeEvery("CREATE_CERTIFICATE", createCertificate);
   yield takeEvery("INCREAUSE_COURSE_WATCHERS_COUNT", increaseCourseWatchers)
   yield takeEvery("ADD_REVIEW_AND_RATING", addReviewRating)
+  yield takeEvery("GET_FETCH_ALL_CLIENTS", getFetchAllClients)
 }
 
 export default mySaga;

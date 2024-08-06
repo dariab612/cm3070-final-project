@@ -30,6 +30,7 @@ const editCategoryRouter = require('./routes/editcategory.route');
 const coursesRouter = require('./routes/courses.route');
 const sessionRouter = require('./routes/session.route');
 const createCertificateRouter = require('./routes/createCertificate.route')
+const clientsRouter = require('./routes/clients.route');
 
 const sessionMiddleware = require('./middlewares/sessions');
 
@@ -76,6 +77,7 @@ app.use('/edit-review', editReviewRouter);
 app.use('/edit-category', editCategoryRouter);
 app.use('/courses', coursesRouter);
 app.use('/create-certificate', createCertificateRouter)
+app.use('/clients', clientsRouter)
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
