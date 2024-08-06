@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useReducer } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
 import './CourseRatingsReviews.css';
@@ -9,10 +9,7 @@ function CourseRatingsReviews() {
   const dispatch = useDispatch();
   const currentCourse = courses && courses.length ? courses.find(course => course.id === Number(courseId)) : null;
 
-  const { session } = useSelector((state) => state.sessionReducer);
-
   const clients = useSelector(state => state.clientsReducer.clients);
-  console.log(clients, 'clients')
 
   useEffect(() => {
     dispatch({ type: 'GET_FETCH_ALL_COURSES' });
@@ -37,6 +34,7 @@ function CourseRatingsReviews() {
     event.preventDefault();
     try {
       dispatch({ type: 'ADD_REVIEW_AND_RATING', payload: { courseId, rating, review } });
+      alert('Your rating & review are correctly added.');
     } catch (error) {
       console.log('Error adding rating & review', error);
     }
@@ -106,20 +104,24 @@ function CourseRatingsReviews() {
             <button type="submit">Submit Rating & Review</button>
           </form>
 
-          {Object.keys(currentCourse.reviews).length > 0 && (
+          {clients && Array.isArray(clients) && Object.keys(currentCourse.reviews).length > 0 && (
             <div className="reviews-section">
               <h3>Reviews</h3>
-              {Object.entries(currentCourse.reviews).map(([user, userReview]) => (
-                <div key={user} className="review">
-                  <div className="review-rating">
-                    {generateStars(currentCourse.ratings[user])}
+              {Object.entries(currentCourse.reviews).map(([user, userReview]) => {
+                const client = clients.find(client => client.telephone === user);
+                const login = client ? client.login : 'Unknown User';
+                return (
+                  <div key={user} className="review">
+                    <div className="review-rating">
+                      {generateStars(currentCourse.ratings[user])}
+                    </div>
+                    <div className="review-details">
+                      <p className="review-login">{login}</p>
+                      <p className="review-text">{userReview}</p>
+                    </div>
                   </div>
-                  <div className="review-details">
-                    <p className="review-login">{session.login ? session.login : 'Unknown User'}</p>
-                    <p className="review-text">{userReview}</p>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
