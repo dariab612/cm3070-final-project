@@ -19,6 +19,7 @@ import AdminCategories from "./components/AdminCategories/AdminCategories.jsx"
 import AdminCourses from "./components/AdminCourses/AdminCourses.jsx"
 import AdminCourseVideos from "./components/AdminCourseVideos/AdminCourseVideos.jsx"
 import CourseRatingsReviews from "./components/CourseRatingsReviews/CourseRatingsReviews.jsx"
+import Footer from "./components/Footer/Footer.jsx"
 import { useDispatch } from "react-redux";
 
 function App() {
@@ -108,7 +109,7 @@ function App() {
         </Route>
 
       </Switch>
-
+    <Footer/>
     </BrowserRouter>
   );
 }

@@ -33,30 +33,29 @@ function SignUp(props) {
     clientPhoneInput.current.value = ''
 
   }
-  console.log('38 clientCreated', clientCreated, '38 clientExist', clientExist)
   if (clientCreated === true) {
     window.location.href = 'http://localhost:3000/signin';
   }
 
   return (
-    <>
-    <h2>Register</h2>
-      {!session.authClient ?
-        <div className="sign-up-form">
-          <input ref={clientNameInput} type="text" name="" id="clientName" placeholder="Name" required />
-          <input ref={clientLastnameInput} type="text" name="" id="clientLastname" placeholder="Lastname" required />
-          <input ref={clientLoginInput} type="text" name="" id="clientLogin" placeholder="Login" required />
-          <input ref={clientPassInput} type="password" name="" id="clientPass" placeholder="Password" required />
-          <input ref={clientPhoneInput} type="phone" name="" id="clientPhone" placeholder="Phone" required />
-          <button onClick={(event) => clientFormHandler(event, clientNameInput, clientLastnameInput, clientLoginInput, clientPassInput, clientPhoneInput)}>Click to register</button>
-        </div>
-        :
-        <p> Registration completed successfully </p>}
+    <div className="sign-up">
+      <h2>Register</h2>
+        {!session.authClient ?
+          <div className="sign-up-form">
+            <input ref={clientNameInput} type="text" name="" id="clientName" placeholder="Name" required />
+            <input ref={clientLastnameInput} type="text" name="" id="clientLastname" placeholder="Lastname" required />
+            <input ref={clientLoginInput} type="text" name="" id="clientLogin" placeholder="Login" required />
+            <input ref={clientPassInput} type="password" name="" id="clientPass" placeholder="Password" required />
+            <input ref={clientPhoneInput} type="phone" name="" id="clientPhone" placeholder="Phone" required />
+            <button onClick={(event) => clientFormHandler(event, clientNameInput, clientLastnameInput, clientLoginInput, clientPassInput, clientPhoneInput)}>Click to register</button>
+          </div>
+          :
+          <p> Registration completed successfully </p>}
 
-      <div>
-        {clientExist === true ? <p>This user already exists</p> : <p></p>}
-      </div>
-    </>
+        <div>
+          {clientExist === true ? <p>This user already exists</p> : <p></p>}
+        </div>
+    </div>
   );
 }
 

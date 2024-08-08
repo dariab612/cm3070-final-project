@@ -32,28 +32,28 @@ function SignIn(props) {
   }
 
   return (
-    <>
-    <h2>Sign In</h2>
-      {!session || !session.authClient ?
-        <div className="login-form">
-          <input ref={clientPhoneInput} type="phone" name="" id="clientPhone" placeholder='Phone' required />
-          <input ref={clientPassInput} type="password" name="" id="clientPass" placeholder='Password' required />
-          <button onClick={(event) => clientFormHandler(event, clientPassInput, clientPhoneInput)}>Login</button>
-        </div>
-        : <p> Authorization was successful </p>}
+    <div className = "sign-in">
+      <h2>Sign In</h2>
+        {!session || !session.authClient ?
+          <div className="login-form">
+            <input ref={clientPhoneInput} type="phone" name="" id="clientPhone" placeholder='Phone' required />
+            <input ref={clientPassInput} type="password" name="" id="clientPass" placeholder='Password' required />
+            <button onClick={(event) => clientFormHandler(event, clientPassInput, clientPhoneInput)}>Login</button>
+          </div>
+          : <p> Authorization was successful </p>}
 
-      {correctPassword === false && !session.authClient ?
-        <p>Wrong password entered</p> :
-        <p></p>
-      }
-      {clientExist === false && !session.authClient ?
-        <p>This user does not exist</p> :
-        <p></p>
-      }
-      {clientExist && correctPassword && session.authClient ?
-        <div>window.location.href = '/'</div>
-        : <p></p>}
-    </>
+        {correctPassword === false && !session.authClient ?
+          <p>Wrong password entered</p> :
+          <p></p>
+        }
+        {clientExist === false && !session.authClient ?
+          <p>This user does not exist</p> :
+          <p></p>
+        }
+        {clientExist && correctPassword && session.authClient ?
+          <div>window.location.href = '/'</div>
+          : <p></p>}
+    </div>
   );
 }
 
