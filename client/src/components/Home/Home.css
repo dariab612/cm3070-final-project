@@ -1,0 +1,46 @@
+.new-courses-box {
+  width: 100vw;
+  background-color: #DEC7DC;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+}
+
+.new-courses-box h2 {
+  color: white;
+  padding-top: 2rem;
+  padding-bottom: 1rem;
+}
+
+.flower-emoji {
+  display: inline-block;
+  transition: transform 1s ease; /* Slower transition */
+}
+
+.new-courses-box h2:hover .flower-emoji {
+  transform: rotate(360deg);
+}
+
+.popular-courses-box {
+  width: 100vw;
+  background-color: #DEC7C7;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+}
+
+.popular-courses-box h2 {
+  color: white;
+  padding-top: 2rem;
+  padding-bottom: 1rem;
+  font-family: 'Russo One', sans-serif;
+}
+
+.popular-courses-box h2:hover .flower-emoji {
+  transform: rotate(360deg);
+}
+
+.emtpy-block {
+  width: 100vw;
+  height: 10vw;
+}
