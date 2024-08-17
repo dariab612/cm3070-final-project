@@ -20,6 +20,8 @@ import AdminCourses from "./components/AdminCourses/AdminCourses.jsx"
 import AdminCourseVideos from "./components/AdminCourseVideos/AdminCourseVideos.jsx"
 import CourseRatingsReviews from "./components/CourseRatingsReviews/CourseRatingsReviews.jsx"
 import Footer from "./components/Footer/Footer.jsx"
+import DiscussionForum from "./components/DiscussionForum/DiscussionForum.jsx"
+import Discussion from "./components/Discussion/Discussion.jsx"
 import { useDispatch } from "react-redux";
 
 function App() {
@@ -108,6 +110,13 @@ function App() {
           <CourseRatingsReviews/>
         </Route>
 
+        <Route exact path ="/discussionforum">
+          <DiscussionForum/>
+        </Route>
+
+        <Route exact path ="/discussion/:id">
+          <Discussion/>
+        </Route>
       </Switch>
     <Footer/>
     </BrowserRouter>

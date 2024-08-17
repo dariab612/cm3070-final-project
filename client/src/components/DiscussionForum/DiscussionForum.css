@@ -1,0 +1,36 @@
+.discussion-forum {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin: 20px;
+    margin-bottom: 30rem;
+}
+
+.search-bar {
+    padding: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+}
+
+.discussion-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-top: 10px;
+    border-radius: 4px;
+}
+
+.discussion-item p {
+    margin: 0;
+    color: #333;
+    transition: transform 0.3s ease-in-out; 
+}
+
+.discussion-item p:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+}

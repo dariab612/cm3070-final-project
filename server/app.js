@@ -31,6 +31,7 @@ const coursesRouter = require('./routes/courses.route');
 const sessionRouter = require('./routes/session.route');
 const createCertificateRouter = require('./routes/createCertificate.route')
 const clientsRouter = require('./routes/clients.route');
+const discussionsRouter = require('./routes/discussions.route');
 
 const sessionMiddleware = require('./middlewares/sessions');
 
@@ -76,8 +77,9 @@ app.use('/admin-pass-change', adminPassChange);
 app.use('/edit-review', editReviewRouter);
 app.use('/edit-category', editCategoryRouter);
 app.use('/courses', coursesRouter);
-app.use('/create-certificate', createCertificateRouter)
-app.use('/clients', clientsRouter)
+app.use('/create-certificate', createCertificateRouter);
+app.use('/clients', clientsRouter);
+app.use('/discussions', discussionsRouter);
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());

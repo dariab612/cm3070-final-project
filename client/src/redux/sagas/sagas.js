@@ -333,8 +333,17 @@ const fetchGetAllClients = async () => {
     headers: { 'Content-Type': 'Application/json' },
   })
   const clients = await response.json()
-  console.log(clients, 'clients 336')
   return clients
+}
+
+const fetchGetDiscussions = async () => {
+  const response = await fetch(`/discussions`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'Application/json' },
+  })
+  const discussions = await response.json()
+  console.log(discussions, ' 345')
+  return discussions
 }
 
 function* getFetchCategories() {
@@ -432,6 +441,13 @@ function* getFetchAllClients(action) {
   yield put({ type: 'INIT_CLIENTS', payload: { clients } })
 }
 
+function* getFetchDiscussions() {
+  console.log('445')
+  const discussions = yield call(fetchGetDiscussions)
+  console.log('447')
+  yield put({ type: 'INIT_DISCUSSIONS', payload: { discussions } })
+}
+
 function* addFetchCourseVideo(action) {
   yield call(fetchCourseVideo(action.payload))
 }
@@ -508,6 +524,7 @@ export function* mySaga() {
   yield takeEvery("INCREAUSE_COURSE_WATCHERS_COUNT", increaseCourseWatchers)
   yield takeEvery("ADD_REVIEW_AND_RATING", addReviewRating)
   yield takeEvery("GET_FETCH_ALL_CLIENTS", getFetchAllClients)
+  yield takeEvery("GET_FETCH_DISCUSSIONS", getFetchDiscussions)
 }
 
 export default mySaga;

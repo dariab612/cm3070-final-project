@@ -41,6 +41,10 @@ function Nav(props) {
         <Link to="/reviews">Reviews</Link>
       </li>
 
+      <li>
+        <Link to="/discussionforum">Discussion Forum</Link>
+      </li>
+
       { 
       session.isAdmin ?
         <> <li>
