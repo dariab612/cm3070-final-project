@@ -342,8 +342,18 @@ const fetchGetDiscussions = async () => {
     headers: { 'Content-Type': 'Application/json' },
   })
   const discussions = await response.json()
-  console.log(discussions, ' 345')
+
   return discussions
+}
+
+const fetchUpdateDiscussions = async (obj) => {
+  await fetch(`/discussions/${obj.discussionId}/update-answers`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'Application/json' },
+    body: JSON.stringify({
+      obj,
+    })
+  })
 }
 
 function* getFetchCategories() {
@@ -442,10 +452,12 @@ function* getFetchAllClients(action) {
 }
 
 function* getFetchDiscussions() {
-  console.log('445')
   const discussions = yield call(fetchGetDiscussions)
-  console.log('447')
   yield put({ type: 'INIT_DISCUSSIONS', payload: { discussions } })
+}
+
+function* updateFetchDiscussion(action) {
+  yield call(fetchUpdateDiscussions, action.payload)
 }
 
 function* addFetchCourseVideo(action) {
@@ -525,6 +537,7 @@ export function* mySaga() {
   yield takeEvery("ADD_REVIEW_AND_RATING", addReviewRating)
   yield takeEvery("GET_FETCH_ALL_CLIENTS", getFetchAllClients)
   yield takeEvery("GET_FETCH_DISCUSSIONS", getFetchDiscussions)
+  yield takeEvery("ADD_DISCUSSION_ANSWER", updateFetchDiscussion)
 }
 
 export default mySaga;

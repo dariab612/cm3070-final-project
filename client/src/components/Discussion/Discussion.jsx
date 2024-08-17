@@ -9,7 +9,6 @@ function Discussion() {
     const dispatch = useDispatch();
     const { id } = useParams();
     const [answer, setAnswer] = useState('');
-    const [userSignedIn, setUserSignedIn] = useState(false);  // Simulate user authentication
 
     useEffect(() => {
         dispatch({ type: 'GET_FETCH_DISCUSSIONS'});
@@ -41,13 +40,9 @@ function Discussion() {
 
     const handleAnswerSubmit = (e) => {
         e.preventDefault();
-        if (!userSignedIn) {
-            alert('Please sign in to submit your answer.');
-            return;
-        }
         try {
             dispatch({ type: 'ADD_DISCUSSION_ANSWER', payload: { discussionId: id, answer } });
-            alert('Your rating & review are correctly added.');
+            alert('Your answer is successfully added.');
         } catch (error) {
             console.log('Error adding answer', error);
         }
