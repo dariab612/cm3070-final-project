@@ -8,7 +8,6 @@ function CourseRatingsReviews() {
   const { courseId } = useParams();
   const dispatch = useDispatch();
   const currentCourse = courses && courses.length ? courses.find(course => course.id === Number(courseId)) : null;
-  
   const clients = useSelector(state => state.clientsReducer.clients);
 
   useEffect(() => {
@@ -23,9 +22,38 @@ function CourseRatingsReviews() {
     resources: '5'
   });
   const [review, setReview] = useState('');
+  const [prompt, setPrompt] = useState({
+    content: "What did you like about the course content?",
+    instructor: "What stood out to you about the instructor?",
+    resources: "What resources were most helpful?"
+  });
+
+  const updatePrompts = (aspect, value) => {
+    const prompts = {
+      content: {
+        low: "What improvements do you suggest for the course content?",
+        high: "What did you like about the course content?",
+      },
+      instructor: {
+        low: "What could the instructor improve on?",
+        high: "What stood out to you about the instructor?",
+      },
+      resources: {
+        low: "What additional resources would you have liked?",
+        high: "What resources were most helpful?",
+      }
+    };
+
+    if (value <= 2) {
+      setPrompt(prev => ({ ...prev, [aspect]: prompts[aspect].low }));
+    } else if (value >= 4) {
+      setPrompt(prev => ({ ...prev, [aspect]: prompts[aspect].high }));
+    }
+  };
 
   const handleRatingChange = (aspect) => (event) => {
     setRatings({...ratings, [aspect]: event.target.value});
+    updatePrompts(aspect, event.target.value);
   };
 
   const handleReviewChange = (event) => {
@@ -37,7 +65,7 @@ function CourseRatingsReviews() {
     const overallRating = Object.values(ratings).reduce((a, b) => a + Number(b), 0) / Object.values(ratings).length;
     try {
       dispatch({ type: 'ADD_REVIEW_AND_RATING', payload: { courseId, rating: overallRating, review } });
-      alert('Your detailed rating & review are successfully added.');
+      alert('Your detailed rating & review have been successfully added.');
     } catch (error) {
       console.error('Error adding rating & review', error);
     }
@@ -46,11 +74,7 @@ function CourseRatingsReviews() {
   const generateStars = (rating) => {
     let starsArray = [];
     for (let i = 0; i < 5; i++) {
-      if (i < rating) {
-        starsArray.push(<span key={i} className='star-inner'>&#9733;</span>);
-      } else {
-        starsArray.push(<span key={i} className='star-outer'>&#9733;</span>);
-      }
+      starsArray.push(<span key={i} className={i < rating ? 'star-inner' : 'star-outer'}>&#9733;</span>);
     }
     return starsArray;
   };
@@ -67,75 +91,40 @@ function CourseRatingsReviews() {
               <h2 id="course-header-rating-and-reviews-page">{currentCourse.name}</h2>
               <div id="star-container">
                 {generateStars(Math.round(currentCourse.averageRating))}
-                <p id="average-rating">
-                  {currentCourse.averageRating ? `${currentCourse.averageRating} stars` : ''}
-                </p>
+                <p id="average-rating">{currentCourse.averageRating ? `${currentCourse.averageRating} stars` : ''}</p>
               </div>
               <p id="ratings-paragraph">
-                {currentCourse.ratingsCounter
-                  ? currentCourse.ratingsCounter === 1
-                    ? `${currentCourse.ratingsCounter} rating`
-                    : `${currentCourse.ratingsCounter} ratings`
-                  : 'No ratings yet'}
+                {currentCourse.ratingsCounter ? `${currentCourse.ratingsCounter} rating${currentCourse.ratingsCounter > 1 ? 's' : ''}` : 'No ratings yet'}
               </p>
-              <p id="course-description">
-                {currentCourse.description}
-              </p>
+              <p id="course-description">{currentCourse.description}</p>
             </div>
           </div>
 
           <h3 className="form-header">What do you think?</h3>
           <form onSubmit={handleSubmit}>
             <div className="rating-section">
-              <label>Overall Rating:
-                <select value={ratings.overall} onChange={handleRatingChange('overall')}>
-                  <option value="5">5 - Excellent</option>
-                  <option value="4">4 - Very Good</option>
-                  <option value="3">3 - Good</option>
-                  <option value="2">2 - Fair</option>
-                  <option value="1">1 - Poor</option>
-                </select>
+              {Object.entries(ratings).map(([aspect, value]) => (
+                <label key={aspect}>
+                  {aspect.charAt(0).toUpperCase() + aspect.slice(1).replace(/([A-Z])/g, ' $1')}:
+                  <select value={value} onChange={handleRatingChange(aspect)}>
+                    <option value="5">5 - Excellent</option>
+                    <option value="4">4 - Very Good</option>
+                    <option value="3">3 - Good</option>
+                    <option value="2">2 - Fair</option>
+                    <option value="1">1 - Poor</option>
+                  </select>
+                  <small>{prompt[aspect]}</small>
+                </label>
+              ))}
+              <label>
+                Review:
+                <textarea value={review} onChange={handleReviewChange} placeholder="Write your detailed review here..." />
               </label>
-              <label>Course Content:
-                <select value={ratings.content} onChange={handleRatingChange('content')}>
-                  <option value="5">5 - Excellent</option>
-                  <option value="4">4 - Very Good</option>
-                  <option value="3">3 - Good</option>
-                  <option value="2">2 - Fair</option>
-                  <option value="1">1 - Poor</option>
-                </select>
-              </label>
-              <label>Instructor Competence:
-                <select value={ratings.instructor} onChange={handleRatingChange('instructor')}>
-                  <option value="5">5 - Excellent</option>
-                  <option value="4">4 - Very Good</option>
-                  <option value="3">3 - Good</option>
-                  <option value="2">2 - Fair</option>
-                  <option value="1">1 - Poor</option>
-                </select>
-              </label>
-              <label>Learning Resources:
-                <select value={ratings.resources} onChange={handleRatingChange('resources')}>
-                  <option value="5">5 - Excellent</option>
-                  <option value="4">4 - Very Good</option>
-                  <option value="3">3 - Good</option>
-                  <option value="2">2 - Fair</option>
-                  <option value="1">1 - Poor</option>
-                </select>
-              </label>
+              <button type="submit">Submit Rating & Review</button>
             </div>
-            <label> 
-              Review:
-              <textarea
-                value={review}
-                onChange={handleReviewChange}
-                placeholder="Write your detailed review here..."
-              />
-            </label>
-            <button type="submit">Submit Rating & Review</button>
           </form>
         
-          {clients && Array.isArray(clients) && Object.keys(currentCourse.reviews).length > 0 && (
+          {clients && Array.isArray(clients) && Object.keys(currentCourse.reviews || {}).length > 0 && (
             <div className="reviews-section">
               <h3>Reviews</h3>
               {Object.entries(currentCourse.reviews).map(([user, userReview]) => {
@@ -143,8 +132,8 @@ function CourseRatingsReviews() {
                 const login = client ? client.login : 'Unknown User';
                 return (
                   <div key={user} className="review">
-                    <div className="review-rating">
-                    {generateStars(currentCourse.ratings[user])}
+                   <div className="review-rating">
+                      {generateStars(currentCourse.ratings[user])}
                     </div>
                     <div className="review-details">
                       <p className="review-login">{login}</p>

@@ -292,3 +292,24 @@
 .review-text {
   color: #555;
 }
+
+.course-ratings-reviews small {
+  display: block;
+  margin-top: 5px;
+  color: #555;
+  font-style: italic;
+}
+
+.course-ratings-reviews select:focus, .course-ratings-reviews textarea:focus {
+  border-color: #9B6D96;
+  box-shadow: 0 0 5px rgba(155, 109, 150, 0.25);
+}
+
+.course-ratings-reviews label {
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+}
+
