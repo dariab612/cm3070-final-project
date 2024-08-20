@@ -26,17 +26,25 @@ function DiscussionForum() {
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log('Submitted:', { discussionName, discussionContent });
-        // Add logic here for what to do with the form data
-        setShowForm(false); // Optionally hide form after submit
+        dispatch({ type: 'POST_FETCH_DISCUSSION', payload: { name: discussionName, text: discussionContent }});
+        setShowForm(false); 
+        alert('Discussion is successfully added.');
     };
 
     const handleCancel = () => {
         setShowForm(false);
     };
 
+    const isSimilar = (searchTerm, title) => {
+        const normalizedSearchTerm = searchTerm.toLowerCase().trim();
+        const normalizedTitle = title.toLowerCase().trim();
+        return normalizedTitle.includes(normalizedSearchTerm) ||
+               normalizedTitle.split(' ').some(word => word.startsWith(normalizedSearchTerm));
+    };
+
     const filteredAndSortedDiscussions = discussions
         .filter(discussion =>
-            discussion.name.toLowerCase().includes(searchTerm.toLowerCase())
+            isSimilar(searchTerm, discussion.name)
         )
         .sort((a, b) => a.id - b.id);
 

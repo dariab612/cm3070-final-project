@@ -11,6 +11,37 @@ router.route('/')
         console.error(error);
         res.status(500).send('An error occurred while retrieving discussions.');
     }
+})
+.post(async (req, res) => {
+    console.log('16')
+    const { text, name } = req.body.obj;
+    console.log(text, name, 'text name')
+    try {
+        let client;
+        if (req.session && req.session.user) {
+            client = await Client.findOne({
+            where: {
+                telephone: req.session.user.telephone,
+            },
+            raw: true
+            });
+        }
+
+        if (!(client && client.login && client.telephone)) {
+            return res.status(404).send('Client not found');
+        }
+
+        const newDiscussion = await Discussion.create({
+            name,
+            text,
+            authorTelephone: client.telephone,
+        });
+        console.log(newDiscussion, 'newDiscussion')
+        res.status(201).json(newDiscussion);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('An error occurred while retrieving discussions.');
+    }
 });
 router.route('/:id/update-answers')
 .put(async (req, res) => {

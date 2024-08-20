@@ -356,6 +356,16 @@ const fetchUpdateDiscussions = async (obj) => {
   })
 }
 
+const fetchAddDiscussion = async (obj) => {
+  await fetch(`/discussions`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'Application/json' },
+    body: JSON.stringify({
+      obj,
+    })
+  })
+}
+
 function* getFetchCategories() {
   const categories = yield call(fetchCategories);
   yield put({ type: "INIT_CATEGORIES", payload: categories });
@@ -460,6 +470,10 @@ function* updateFetchDiscussion(action) {
   yield call(fetchUpdateDiscussions, action.payload)
 }
 
+function* addFetchDiscussion(action) {
+  yield call(fetchAddDiscussion, action.payload)
+}
+
 function* addFetchCourseVideo(action) {
   yield call(fetchCourseVideo(action.payload))
 }
@@ -538,6 +552,7 @@ export function* mySaga() {
   yield takeEvery("GET_FETCH_ALL_CLIENTS", getFetchAllClients)
   yield takeEvery("GET_FETCH_DISCUSSIONS", getFetchDiscussions)
   yield takeEvery("ADD_DISCUSSION_ANSWER", updateFetchDiscussion)
+  yield takeEvery("POST_FETCH_DISCUSSION", addFetchDiscussion)
 }
 
 export default mySaga;

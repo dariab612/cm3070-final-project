@@ -8,6 +8,7 @@ import './CourseList.css';
 function CourseList() {
   const courses = useSelector(state => state.coursesReducer.courses);
   const dispatch = useDispatch();
+  const { session } = useSelector((state) => state.sessionReducer);
   const { categoryname, id } = useParams();
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredCourses, setFilteredCourses] = useState([]);
@@ -28,59 +29,69 @@ function CourseList() {
 
   const forceUpdate = useForceUpdate();
 
-  useEffect(() => {
-    const filterCourses = () => {
-      let filtered = courses || [];
+  function getRecommendationScores(courses, userTelephone) {
+    const userViewedCourses = courses.filter(course => course.viewers.includes(userTelephone));
+    const similarUserViewedCourses = courses.filter(course => 
+      course.viewers.some(phone => userViewedCourses.flatMap(c => c.viewers).includes(phone))
+    );
 
-      if (filtered.length) {
-        filtered = filtered.sort((a, b) => a.id - b.id); 
-      }
-  
-      if (searchTerm) {
-        filtered = filtered.filter(course =>
-          course.name.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-      }
+    return courses.map(course => ({
+      ...course,
+      score: (
+        (course.viewers.includes(userTelephone) ? 10 : 0) +
+        (similarUserViewedCourses.includes(course) ? 5 : 0) +
+        (course.averageRating > 4 ? 5 : 0) +
+        (course.ratingsCounter > 10 ? 3 : 0)
+      )
+    }));
+  }
+
+  function multiCriteriaSort(courses, certifiedOnly, sortNewest, sortPopular, sortFavourites) {
+    return courses.sort((a, b) => {
+      let scoreDiff = b.score - a.score;
+      if (scoreDiff !== 0) return scoreDiff;
 
       if (certifiedOnly) {
-        filtered = filtered.filter(course => course.isCertified);
+        if (a.isCertified && !b.isCertified) return -1;
+        if (!a.isCertified && b.isCertified) return 1;
       }
 
-      if (sortFavourites) {
-        filtered = filtered.sort((a, b) => {
-          const aAvgRating = a.averageRating || 0;
-          const bAvgRating = b.averageRating || 0;
-
-          if (a.ratingsCounter >= 5 && b.ratingsCounter >= 5) {
-            if (aAvgRating >= 3.5 && bAvgRating >= 3.5) {
-              return bAvgRating - aAvgRating;
-            }
-            if (aAvgRating >= 3.5) return -1;
-            if (bAvgRating >= 3.5) return 1;
-            return bAvgRating - aAvgRating;
-          }
-
-          if (a.ratingsCounter >= 5) return -1;
-          if (b.ratingsCounter >= 5) return 1;
-          return bAvgRating - aAvgRating;
-        });
-      } else {
-        if (sortNewest) {
-          filtered = filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-        }
-
-        if (sortPopular) {
-          filtered = filtered.sort((a, b) => b.viewersCounter - a.viewersCounter);
-        }
+      if (sortNewest) {
+        let dateDiff = new Date(b.createdAt) - new Date(a.createdAt);
+        if (dateDiff !== 0) return dateDiff;
       }
+
+      if (sortPopular) {
+        let viewersDiff = b.viewersCounter - a.viewersCounter;
+        if (viewersDiff !== 0) return viewersDiff;
+      }
+
+      if (sortFavourites && a.ratingsCounter >= 5 && b.ratingsCounter >= 5) {
+        return b.averageRating - a.averageRating;
+      }
+
+      return a.id - b.id; // Fallback to default by ID if all else is equal
+    });
+  }
+
+  useEffect(() => {
+    const filterAndSortCourses = () => {
+      if (!Array.isArray(courses)) {
+        console.warn('Courses data is not an array', courses);
+        setFilteredCourses([]);
+        return;
+      }
+
+      let filtered = getRecommendationScores([...courses], session.telephone);
+
+      filtered = multiCriteriaSort(filtered, certifiedOnly, sortNewest, sortPopular, sortFavourites);
 
       setFilteredCourses(filtered);
+      forceUpdate(); // Force a re-render to update the UI
     };
 
-    filterCourses();
-
-    forceUpdate();
-  }, [courses, searchTerm, certifiedOnly, sortNewest, sortPopular, sortFavourites]);
+    filterAndSortCourses();
+  }, [courses, session.telephone, certifiedOnly, sortNewest, sortPopular, sortFavourites]);
 
   return (
     <div>
@@ -141,7 +152,7 @@ function CourseList() {
             <Course key={uuidv4()} course={course} />
           ))
         ) : (
-          <li>No courses</li>
+          <li>No courses found.</li>
         )}
       </ul>
     </div>
