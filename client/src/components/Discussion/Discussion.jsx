@@ -64,7 +64,7 @@ function Discussion() {
                 />
                 <button type="submit" className="submit-answer">Submit Answer</button>
             </form>
-            <Link to="/">← Back to all discussions</Link>
+            <Link to="/discussionforum">← Back to all discussions</Link>
         </div>
     );
 }

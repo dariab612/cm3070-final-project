@@ -36,6 +36,16 @@ router.route('/:id/update-answers')
         if (!discussion) {
             return res.status(404).json({ message: 'Discussion not found' });
         }
+
+        const currentAnswers = discussion.answers ? discussion.answers :  {};
+        currentAnswers[client.telephone] = answer;
+
+        await Discussion.update({
+            answers: currentAnswers,
+          }, { where: { id: discussion.id }, raw: true });
+      
+        const updatedDiscussion = await Discussion.findOne({ where: { id: discussion.id }, raw: true });
+        return res.json({ updatedDiscussion });
     } catch(error) {
         console.error(error);
         return res.status(401).json({ deleted: false });
