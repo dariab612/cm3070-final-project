@@ -8,22 +8,24 @@ function CourseRatingsReviews() {
   const { courseId } = useParams();
   const dispatch = useDispatch();
   const currentCourse = courses && courses.length ? courses.find(course => course.id === Number(courseId)) : null;
-
+  
   const clients = useSelector(state => state.clientsReducer.clients);
 
   useEffect(() => {
     dispatch({ type: 'GET_FETCH_ALL_COURSES' });
-  }, [dispatch]);
-
-  useEffect(() => {
     dispatch({ type: 'GET_FETCH_ALL_CLIENTS' });
   }, [dispatch]);
 
-  const [rating, setRating] = useState('5');
+  const [ratings, setRatings] = useState({
+    overall: '5',
+    content: '5',
+    instructor: '5',
+    resources: '5'
+  });
   const [review, setReview] = useState('');
 
-  const handleRatingChange = (event) => {
-    setRating(event.target.value);
+  const handleRatingChange = (aspect) => (event) => {
+    setRatings({...ratings, [aspect]: event.target.value});
   };
 
   const handleReviewChange = (event) => {
@@ -32,11 +34,12 @@ function CourseRatingsReviews() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const overallRating = Object.values(ratings).reduce((a, b) => a + Number(b), 0) / Object.values(ratings).length;
     try {
-      dispatch({ type: 'ADD_REVIEW_AND_RATING', payload: { courseId, rating, review } });
-      alert('Your rating & review are correctly added.');
+      dispatch({ type: 'ADD_REVIEW_AND_RATING', payload: { courseId, rating: overallRating, review } });
+      alert('Your detailed rating & review are successfully added.');
     } catch (error) {
-      console.log('Error adding rating & review', error);
+      console.error('Error adding rating & review', error);
     }
   };
 
@@ -83,27 +86,55 @@ function CourseRatingsReviews() {
 
           <h3 className="form-header">What do you think?</h3>
           <form onSubmit={handleSubmit}>
-            <label>
-              Rating:
-              <select value={rating} onChange={handleRatingChange}>
-                <option value="5">5 - Excellent</option>
-                <option value="4">4 - Very Good</option>
-                <option value="3">3 - Good</option>
-                <option value="2">2 - Fair</option>
-                <option value="1">1 - Poor</option>
-              </select>
-            </label>
-            <label>
+            <div className="rating-section">
+              <label>Overall Rating:
+                <select value={ratings.overall} onChange={handleRatingChange('overall')}>
+                  <option value="5">5 - Excellent</option>
+                  <option value="4">4 - Very Good</option>
+                  <option value="3">3 - Good</option>
+                  <option value="2">2 - Fair</option>
+                  <option value="1">1 - Poor</option>
+                </select>
+              </label>
+              <label>Course Content:
+                <select value={ratings.content} onChange={handleRatingChange('content')}>
+                  <option value="5">5 - Excellent</option>
+                  <option value="4">4 - Very Good</option>
+                  <option value="3">3 - Good</option>
+                  <option value="2">2 - Fair</option>
+                  <option value="1">1 - Poor</option>
+                </select>
+              </label>
+              <label>Instructor Competence:
+                <select value={ratings.instructor} onChange={handleRatingChange('instructor')}>
+                  <option value="5">5 - Excellent</option>
+                  <option value="4">4 - Very Good</option>
+                  <option value="3">3 - Good</option>
+                  <option value="2">2 - Fair</option>
+                  <option value="1">1 - Poor</option>
+                </select>
+              </label>
+              <label>Learning Resources:
+                <select value={ratings.resources} onChange={handleRatingChange('resources')}>
+                  <option value="5">5 - Excellent</option>
+                  <option value="4">4 - Very Good</option>
+                  <option value="3">3 - Good</option>
+                  <option value="2">2 - Fair</option>
+                  <option value="1">1 - Poor</option>
+                </select>
+              </label>
+            </div>
+            <label> 
               Review:
               <textarea
                 value={review}
                 onChange={handleReviewChange}
-                placeholder="Write your review here..."
+                placeholder="Write your detailed review here..."
               />
             </label>
             <button type="submit">Submit Rating & Review</button>
           </form>
-
+        
           {clients && Array.isArray(clients) && Object.keys(currentCourse.reviews).length > 0 && (
             <div className="reviews-section">
               <h3>Reviews</h3>
@@ -113,7 +144,7 @@ function CourseRatingsReviews() {
                 return (
                   <div key={user} className="review">
                     <div className="review-rating">
-                      {generateStars(currentCourse.ratings[user])}
+                    {generateStars(currentCourse.ratings[user])}
                     </div>
                     <div className="review-details">
                       <p className="review-login">{login}</p>
