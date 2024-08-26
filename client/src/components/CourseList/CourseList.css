@@ -65,3 +65,24 @@
 .menu-button.open .line:nth-child(3) {
   transform: rotate(-45deg) translate(5px, -5px);
 }
+.go-back-button {
+  display: inline-block;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  background-color: #DEC7DC;
+  color: #9B6D96;
+  border: none;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 16px;
+  cursor: pointer;
+  margin-left: 3.3rem;
+  transition: background-color 0.3s ease;
+  text-decoration: none;
+  font-family: 'Arial', sans-serif;
+}
+
+.go-back-button:hover {
+  background-color: #DEC7DC;
+  color: #9B6D96;
+}

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useReducer } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
+import { Link } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import Course from '../Course/Course';
 import './CourseList.css';
@@ -70,7 +71,7 @@ function CourseList() {
         return b.averageRating - a.averageRating;
       }
 
-      return a.id - b.id; // Fallback to default by ID if all else is equal
+      return a.id - b.id;
     });
   }
 
@@ -110,6 +111,9 @@ function CourseList() {
           <div className="line"></div>
         </button>
       </div>
+      <Link to="/categories" className="go-back-button">
+        &larr; Back to Categories
+      </Link>
       {filtersOpen && (
         <div className="filters-menu">
           <label>
