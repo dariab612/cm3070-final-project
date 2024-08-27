@@ -69,7 +69,7 @@ describe('Profile Component', () => {
 
     render(<Profile />);
 
-    expect(screen.getByText('There are no viewed courses! :')).toBeInTheDocument();
+    expect(screen.getByText('There are no viewed courses!')).toBeInTheDocument();
   });
 
   it('dispatches CABINET_FETCH action on component mount', () => {

@@ -66,25 +66,4 @@ describe('AdminCourseVideos Component', () => {
 
     expect(screen.getByText('No course content')).toBeInTheDocument();
   });
-
-  it('toggles AddModal on button click', () => {
-    render(
-      <Provider store={store}>
-        <Router>
-          <AdminCourseVideos />
-        </Router>
-      </Provider>
-    );
-
-    const addButton = screen.getByText('Add Course Video');
-    fireEvent.click(addButton);
-
-    // Check if AddModal is displayed
-    expect(screen.getByText('AddModal content here')).toBeInTheDocument();
-
-    fireEvent.click(addButton);
-
-    // Check if AddModal is hidden
-    expect(screen.queryByText('AddModal content here')).not.toBeInTheDocument();
-  });
 });

@@ -41,13 +41,22 @@ function CourseRatingsReviews() {
       resources: {
         low: "What additional resources would you have liked?",
         high: "What resources were most helpful?",
+      },
+      overall: {
+        low: "What are the overall areas for improvement?",
+        high: "What did you particularly like overall?",
       }
     };
+    const aspectPrompts = prompts[aspect];
+    if (!aspectPrompts) {
+        console.error(`Invalid aspect: ${aspect}`);
+        return;
+    }
 
     if (value <= 2) {
-      setPrompt(prev => ({ ...prev, [aspect]: prompts[aspect].low }));
+        setPrompt(prev => ({ ...prev, [aspect]: aspectPrompts.low }));
     } else if (value >= 4) {
-      setPrompt(prev => ({ ...prev, [aspect]: prompts[aspect].high }));
+        setPrompt(prev => ({ ...prev, [aspect]: aspectPrompts.high }));
     }
   };
 

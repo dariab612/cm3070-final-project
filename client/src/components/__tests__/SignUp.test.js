@@ -38,15 +38,18 @@ describe('SignUp Component', () => {
     const phone = '1234567890'
 
     const nameInput = screen.getByPlaceholderText('Name')
+    const loginInput = screen.getByPlaceholderText('Login')
     const passwordInput = screen.getByPlaceholderText('Password')
     const phoneInput = screen.getByPlaceholderText('Phone')
 
     fireEvent.change(nameInput, { target: { value: name } });
+    fireEvent.change(loginInput, { target: { value: name } });
     fireEvent.change(passwordInput, { target: { value: password } });
     fireEvent.change(screen.getByPlaceholderText('Phone'), { target: { value: phone } });
 
     // Verify the values are updated
     expect(nameInput.value).toBe(name);
+    expect(loginInput.value).toBe(name);
     expect(passwordInput.value).toBe(password);
     expect(phoneInput.value).toBe(phone);
 
@@ -54,12 +57,12 @@ describe('SignUp Component', () => {
     fireEvent.click(screen.getByText('Click to register'));
     expect(mockDispatch).toHaveBeenCalledWith({
       type: 'FETCH_SIGN_UP',
-      payload: { login: name, password, telephone: phone},
+      payload: { login: name, name: name, password, lastname: "", telephone: phone},
     });
   });
 
   it('displays error message if user already exists', () => {
-    useSelector.mockReturnValue({ session: {}, clientExist: false });
+    useSelector.mockReturnValue({ session: {}, clientExist: true });
 
     render(<SignUp />);
 
