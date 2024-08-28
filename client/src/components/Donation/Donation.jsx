@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Donation.css'; // Import the CSS file for styling
+import './Donation.css';
 
 function Donation() {
   const [donationAmount, setDonationAmount] = useState('');

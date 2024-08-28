@@ -30,7 +30,6 @@
 }
 
 /* add review form */
-
 button {
   outline: none;
   cursor: pointer;
@@ -40,15 +39,15 @@ button {
   line-height: 34px;
   margin: 5px 0 0 0;
   font-size: 14px;
-  color: #241c15;
-  background-color: #48bf48;
+  color: white;
+  background-color: #F1B4D5;
   transition: .2s;
   padding: 0 18px;
 }
 
 button:hover {
-  color: #241c15;
-  background-color: rgb(87, 209, 93);
+  color: white;
+  background-color: #D99BB6;;
 }
 
 input {

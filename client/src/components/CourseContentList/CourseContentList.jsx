@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
 import CourseContent from '../CourseContent/CourseContent';
 import './CourseContentList.css';
+import { Link } from 'react-router-dom';
 
 function CourseContentList() {
   const courses = useSelector(state => state.coursesReducer.courses);
@@ -120,6 +121,9 @@ function CourseContentList() {
         </div>
       )}
 
+      <Link to="/categories" className="go-to-all-courses">
+          ← Go Back To Categories
+      </Link>
     </div>
   );
 }

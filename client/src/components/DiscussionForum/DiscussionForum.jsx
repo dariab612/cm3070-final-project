@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import './DiscussionForum.css';
 
 function DiscussionForum() {
@@ -10,9 +10,12 @@ function DiscussionForum() {
     const [discussionContent, setDiscussionContent] = useState('');
     const discussions = useSelector(state => state.discussionsReducer.discussions);
     const dispatch = useDispatch();
+    const history = useHistory();
+
+    const { session } = useSelector((state) => state.sessionReducer);
 
     useEffect(() => {
-        dispatch({ type: 'GET_FETCH_DISCUSSIONS'});
+        dispatch({ type: 'GET_FETCH_DISCUSSIONS' });
     }, [dispatch]);
 
     const handleSearchChange = (event) => {
@@ -25,8 +28,12 @@ function DiscussionForum() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log('Submitted:', { discussionName, discussionContent });
-        dispatch({ type: 'POST_FETCH_DISCUSSION', payload: { name: discussionName, text: discussionContent }});
+        if (!session.authClient) {
+            alert("You need to be authorized to complete this action."); // Alert the user
+            history.push('/signin'); // Redirect to the sign-in page
+            return;
+        }
+        dispatch({ type: 'POST_FETCH_DISCUSSION', payload: { name: discussionName, text: discussionContent } });
         setShowForm(false); 
         alert('Discussion is successfully added.');
     };

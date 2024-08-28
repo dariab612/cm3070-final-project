@@ -1,27 +1,37 @@
-import React, { useState, useRef } from 'react';
-import { useDispatch } from 'react-redux';
-
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom'; 
 import './Review.css';
 
 export function AddReviewForm() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const history = useHistory(); 
+  const { session } = useSelector(state => state.sessionReducer); 
 
   const [name, setName] = useState('');
   const [text, setText] = useState('');
 
   function nameChange({ target: { value } }) {
-    setName(value)
+    setName(value);
   }
+
   function textChange({ target: { value } }) {
-    setText(value)
+    setText(value);
   }
-  const isValid = false
+
+  const isValid = false;
 
   function addReviewFunc(event) {
-    event.preventDefault()
-    dispatch({ type: 'ADD_FETCH_REVIEW', payload: { name: name, text: text, isValid: isValid } })
-    setName('')
-    setText('')
+    event.preventDefault();
+    if (!session.authClient) {
+      alert("You need to be authorized to complete this action."); 
+      history.push('/signin');
+      return;
+    }
+
+    dispatch({ type: 'ADD_FETCH_REVIEW', payload: { name: name, text: text, isValid: isValid } });
+    setName('');
+    setText('');
 
     alert('Your review will be displayed after the moderator approves it.');
   }
@@ -36,6 +46,5 @@ export function AddReviewForm() {
     </form>
   );
 }
-
 
 export default AddReviewForm;

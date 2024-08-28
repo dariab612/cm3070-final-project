@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useHistory } from 'react-router-dom';
 import './Discussion.css';
 
 function Discussion() {
     const discussions = useSelector(state => state.discussionsReducer.discussions);
     const clients = useSelector(state => state.clientsReducer.clients);
     const dispatch = useDispatch();
+    const history = useHistory(); // Use history for navigation
     const { id } = useParams();
     const [answer, setAnswer] = useState('');
 
+    const { session } = useSelector((state) => state.sessionReducer);
+
     useEffect(() => {
-        dispatch({ type: 'GET_FETCH_DISCUSSIONS'});
+        dispatch({ type: 'GET_FETCH_DISCUSSIONS' });
         dispatch({ type: 'GET_FETCH_ALL_CLIENTS' });
     }, [dispatch]);
 
@@ -31,7 +34,6 @@ function Discussion() {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
     });
 
-    // Mapping answers to client names
     const answersElements = discussion.answers ? Object.entries(discussion.answers).map(([telephone, text]) => {
         const client = clients.find(client => client.telephone === telephone);
         const clientName = client ? client.name : 'Unknown';
@@ -40,9 +42,21 @@ function Discussion() {
 
     const handleAnswerSubmit = (e) => {
         e.preventDefault();
+        if (!session.authClient) {
+            alert("You need to be authorized to complete this action."); // Alert for unauthorized access
+            history.push('/signin'); // Redirect to sign-in page
+            return;
+        }
+
+        if (!answer.trim()) {
+            alert("Discussion answer field cannot be empty");
+            return;
+        }
+
         try {
             dispatch({ type: 'ADD_DISCUSSION_ANSWER', payload: { discussionId: id, answer } });
             alert('Your answer is successfully added.');
+            setAnswer('');
         } catch (error) {
             console.log('Error adding answer', error);
         }

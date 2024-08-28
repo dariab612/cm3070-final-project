@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router';
+import { useParams, useHistory } from 'react-router-dom';
 import './CourseRatingsReviews.css';
 
 function CourseRatingsReviews() {
   const courses = useSelector(state => state.coursesReducer.courses);
   const { courseId } = useParams();
   const dispatch = useDispatch();
+  const history = useHistory();
   const currentCourse = courses && courses.length ? courses.find(course => course.id === Number(courseId)) : null;
   const clients = useSelector(state => state.clientsReducer.clients);
 
@@ -27,6 +28,8 @@ function CourseRatingsReviews() {
     instructor: "What stood out to you about the instructor?",
     resources: "What resources were most helpful?"
   });
+
+  const { session } = useSelector(state => state.sessionReducer);
 
   const updatePrompts = (aspect, value) => {
     const prompts = {
@@ -61,7 +64,7 @@ function CourseRatingsReviews() {
   };
 
   const handleRatingChange = (aspect) => (event) => {
-    setRatings({...ratings, [aspect]: event.target.value});
+    setRatings({ ...ratings, [aspect]: event.target.value });
     updatePrompts(aspect, event.target.value);
   };
 
@@ -71,10 +74,17 @@ function CourseRatingsReviews() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (!session.authClient) {
+      alert("You need to be authorized to complete this action.");
+      history.push('/signin');
+      return;
+    }
+
     const overallRating = Object.values(ratings).reduce((a, b) => a + Number(b), 0) / Object.values(ratings).length;
     try {
       dispatch({ type: 'ADD_REVIEW_AND_RATING', payload: { courseId, rating: overallRating, review } });
       alert('Your detailed rating & review have been successfully added.');
+      setReview('');
     } catch (error) {
       console.error('Error adding rating & review', error);
     }

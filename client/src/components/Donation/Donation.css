@@ -18,14 +18,19 @@
 }
 
 .donate-button {
-  background-color: #FFC300;
+  background-color: #E7BBD0;
   color: white;
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
 }
 
 .donate-button:hover {
-  background-color: #FFC300;
+  background-color: #D6A6B7;
+  color: white;
 }
+
