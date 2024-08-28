@@ -11,7 +11,7 @@ function Categories(props) {
 
   return (
       <div className="categories-block">
-          <h2>Course Categories</h2>
+          <h2>&#10084; Course Categories &#10084;</h2>
           <div className="categories-main-page">
               {categories.length ? categories.map((category) => <Category key={category.id} category={category} />) : <p>No categories</p>}
           </div>

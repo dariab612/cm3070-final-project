@@ -47,24 +47,14 @@ function CourseList() {
     }));
   }
 
-  function multiCriteriaSort(courses, certifiedOnly, sortNewest, sortPopular, sortFavourites) {
+  function multiCriteriaSort(courses) {
     return courses.sort((a, b) => {
-      let scoreDiff = b.score - a.score;
-      if (scoreDiff !== 0) return scoreDiff;
-
-      if (certifiedOnly) {
-        if (a.isCertified && !b.isCertified) return -1;
-        if (!a.isCertified && b.isCertified) return 1;
+      if (sortPopular) {
+        return b.viewersCounter - a.viewersCounter;
       }
 
       if (sortNewest) {
-        let dateDiff = new Date(b.createdAt) - new Date(a.createdAt);
-        if (dateDiff !== 0) return dateDiff;
-      }
-
-      if (sortPopular) {
-        let viewersDiff = b.viewersCounter - a.viewersCounter;
-        if (viewersDiff !== 0) return viewersDiff;
+        return new Date(b.createdAt) - new Date(a.createdAt);
       }
 
       if (sortFavourites && a.ratingsCounter >= 5 && b.ratingsCounter >= 5) {
@@ -78,30 +68,40 @@ function CourseList() {
   useEffect(() => {
     const filterAndSortCourses = () => {
       if (!Array.isArray(courses)) {
-        console.warn('Courses data is not an array', courses);
         setFilteredCourses([]);
         return;
       }
 
       let filtered = getRecommendationScores([...courses], session.telephone);
 
-      filtered = multiCriteriaSort(filtered, certifiedOnly, sortNewest, sortPopular, sortFavourites);
+      if (certifiedOnly) {
+        filtered = filtered.filter(course => course.isCertified);
+      }
 
+      filtered = multiCriteriaSort(filtered);
       setFilteredCourses(filtered);
-      forceUpdate(); // Force a re-render to update the UI
+      forceUpdate();
     };
 
     filterAndSortCourses();
   }, [courses, session.telephone, certifiedOnly, sortNewest, sortPopular, sortFavourites]);
 
+  const colorPalette = [
+    '#DEC7DC',
+    '#DEC7C7',
+    '#E7BBD0',
+    '#F1B4D5',
+    '#EAB8B8',
+  ];
+
   return (
     <div>
-      <h2>{categoryname}</h2>
+      <h2>&#10083; {categoryname} &#10083;</h2>
       <div className="filters-container">
         <input
           id="course-search"
           type="text"
-          placeholder="Search courses"
+          placeholder="Search courses..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
@@ -110,10 +110,10 @@ function CourseList() {
           <div className="line"></div>
           <div className="line"></div>
         </button>
+        <Link to="/categories" className="go-back-button">
+          &larr; Back to Categories
+        </Link>
       </div>
-      <Link to="/categories" className="go-back-button">
-        &larr; Back to Categories
-      </Link>
       {filtersOpen && (
         <div className="filters-menu">
           <label>
@@ -152,8 +152,8 @@ function CourseList() {
       )}
       <ul className="course-list">
         {filteredCourses.length ? (
-          filteredCourses.map(course => (
-            <Course key={uuidv4()} course={course} />
+          filteredCourses.map((course, index) => (
+            <Course key={uuidv4()} course={course} color={colorPalette[index % colorPalette.length]} />
           ))
         ) : (
           <li>No courses found.</li>

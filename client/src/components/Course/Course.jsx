@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './Course.css';
 
-function Course({ course }) {
+function Course({ course, color }) {
   const coursename = course.name;
   const id = course.id;
   const picture = course.picture;
@@ -20,7 +20,7 @@ function Course({ course }) {
   };
 
   return (
-    <div className="course-card">
+    <div className="course-card" style={{ backgroundColor: color }}>
       <Link to={`/categories/:categoryname/${coursename}/${id}`}>
         <li><h3>{course.name}</h3></li>
       </Link>

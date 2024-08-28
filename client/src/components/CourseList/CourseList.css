@@ -1,16 +1,45 @@
-#course-search {
-  margin: 0.5vw 1vw 0;
-  width: 27vw;
+.course-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  list-style-type: none; 
+  padding: 0;
 }
 
-#course-search {
-  margin-left:4.2vw;
+.course {
+  margin: 10px; 
+  width: 25vw;
+  height: 300px; 
+  transition: transform 0.2s; /* Smooth transition on hover */
+  overflow: hidden; /* Prevent overflow of content */
+  position: relative; /* Position for absolute elements */
+}
+
+.course img {
+  width: 100%; /* Full width of the course item */
+  height: 200px; /* Fixed height for images */
+  object-fit: cover; /* Cover the area without distortion */
+}
+
+.course h3 {
+  font-size: 24px; /* Adjust title size */
+  color: black; /* Adjust color */
+  position: absolute; /* Position the title */
+  bottom: 10px; /* Place at the bottom */
+  left: 10px; /* Align with left */
+  text-shadow: 1px 1px 2px rgba(150, 150, 150, 0.8); /* Add text shadow for readability */
+}
+
+.course:hover {
+  transform: scale(1.05); /* Slightly enlarge on hover */
 }
 
 .filters-container {
   display: flex;
   align-items: center;
   margin-bottom: 1vw;
+  margin-left: 1.5rem;
 }
 
 .filters-menu {
@@ -37,7 +66,7 @@
 }
 
 .menu-button .line {
-  background-color: black;
+  background-color: #9B6D96;
   height: 2px;
   width: 24px;
   transition: all 0.3s ease-in-out;
@@ -46,7 +75,7 @@
 
 .menu-button:hover .line,
 .menu-button.open:hover .line {
-  background-color: #48bf48;
+  background-color: #9B6D96;
 }
 
 .menu-button:hover,
@@ -68,7 +97,6 @@
 .go-back-button {
   display: inline-block;
   padding: 10px 20px;
-  margin-bottom: 20px;
   background-color: #DEC7DC;
   color: #9B6D96;
   border: none;
@@ -76,7 +104,7 @@
   text-align: center;
   font-size: 16px;
   cursor: pointer;
-  margin-left: 3.3rem;
+  margin-left: 34rem;
   transition: background-color 0.3s ease;
   text-decoration: none;
   font-family: 'Arial', sans-serif;
@@ -84,5 +112,14 @@
 
 .go-back-button:hover {
   background-color: #DEC7DC;
+  color: white;
+}
+
+#course-search {
+  width: 27vw;
+  color: #9B6D96;
+}
+
+#course-search::placeholder {
   color: #9B6D96;
 }

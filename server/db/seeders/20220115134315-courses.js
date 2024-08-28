@@ -8,10 +8,10 @@ module.exports = {
         name: "Men's haircut", picture: 'images/man.jpg', categoryId: '1', description: "                Master the art of men's haircutting with this comprehensive course. Learn essential techniques and modern styles to elevate your barbering skills and meet client expectations.", numberOfVideos: 4, createdAt: new Date(), updatedAt: new Date(),
       },
       {
-        name: 'Clipper haircut', picture: 'images/clipper.jpg', categoryId: '1', description: '', createdAt: new Date(), updatedAt: new Date(),
+        name: 'Clipper haircut', picture: 'images/newclipper.jpg', categoryId: '1', description: '', createdAt: new Date(), updatedAt: new Date(),
       },
       {
-        name: "Children's haircut", picture: 'images/children.jpg', categoryId: '1', description: '', createdAt: new Date(), updatedAt: new Date(),
+        name: "Children's haircut", picture: 'images/newchildren.jpg', categoryId: '1', description: '', createdAt: new Date(), updatedAt: new Date(),
       },
       {
         name: "Coloring short hair", picture: 'images/color_short_hair.jpg', categoryId: '2', description: '', createdAt: new Date(), updatedAt: new Date(),

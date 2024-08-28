@@ -54,7 +54,7 @@ function DiscussionForum() {
 
     return (
         <div className="discussion-forum">
-            <h2>Discussions</h2>
+            <h2>Discussions 💌</h2>
             <input
                 type="text"
                 placeholder="Search discussions..."
