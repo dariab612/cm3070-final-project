@@ -32,3 +32,10 @@
 .admin-reviews input {
   margin-top: 25px;
 }
+
+.new-reviews-title {
+  text-align: center;
+  font-size: 24px;
+  margin: 20px 0;
+  color: black;
+}

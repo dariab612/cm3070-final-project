@@ -1,8 +1,77 @@
 .admin-form {
-  display: flex;
-  flex-direction: column;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+  max-width: 400px;
+  margin-bottom: 13rem;
+}
+
+.admin-form h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+  font-family: 'Russo One', sans-serif;
 }
 
 .admin-form input {
-  margin: 5px 0 0;
+  padding: 10px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 16px;
+  font-family: 'Arial', sans-serif;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.admin-form input:focus {
+  border-color: #9B6D96;
+  outline: none;
+}
+
+.admin-form button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  background-color: #9B6D96;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-family: 'Arial', sans-serif;
+  transition: background-color 0.3s ease;
+  margin-top: 10px; /* Add space above the button */
+}
+
+.admin-form button:hover {
+  background-color: #DEC7DC;
+}
+
+.admin-form p {
+  text-align: center;
+  margin-top: 20px;
+  color: #333;
+  font-family: 'Arial', sans-serif;
+}
+
+.error-message {
+  color: #d9534f;
+  text-align: center;
+  margin-top: 15px;
+  font-family: 'Arial', sans-serif;
+}
+
+@media (max-width: 480px) {
+  .admin-form {
+    padding: 15px;
+  }
+
+  .admin-form input,
+  .admin-form button {
+    font-size: 14px;
+  }
 }

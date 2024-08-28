@@ -32,7 +32,9 @@ function AdminChangePass(props) {
       <h2>Change Password</h2>
       <div className="admin-menu">
         <Link to="/adminreview">Reviews</Link>
-        <Link to="/adminchangepass">Change Password</Link>
+        <Link to="/admincategories">Admin Categories</Link>
+        <Link to="/admincourses">Admin Courses</Link>
+        <Link to="/admincoursevideos">Admin Courses Content</Link>
       </div>
       <form onSubmit={changePass} className="change-pass-admin-form">
         <input onClick={() => dispatch({ type: 'RESET_MESSAGE' })} name='oldPass' type="password" placeholder='Old password' />

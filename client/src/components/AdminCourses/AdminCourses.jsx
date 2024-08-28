@@ -17,9 +17,10 @@ function AdminCourses() {
     <>
       <h2>Courses</h2>
       <div className="admin-menu">
-        <Link to="/adminreview">Reviews</Link>
+      <Link to="/adminreview">Reviews</Link>
         <Link to="/adminchangepass">Change Password</Link>
         <Link to="/admincategories">Admin Categories</Link>
+        <Link to="/admincoursevideos">Admin Courses Content</Link>
       </div>
       <div className="courses-main-page">
        {courses.length? 

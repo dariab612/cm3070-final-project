@@ -17,17 +17,22 @@ function AdminCategories(props) {
    <>
    <h2>Categories</h2>
    <div className="admin-menu">
-     <Link to="/adminreview">Reviews</Link>
-     <Link to="/adminchangepass">Change Password</Link>
-     <Link to="/admincourses">Admin Courses</Link>
+        <Link to="/adminreview">Reviews</Link>
+        <Link to="/adminchangepass">Change Password</Link>
+        <Link to="/admincourses">Admin Courses</Link>
+        <Link to="/admincoursevideos">Admin Courses Content</Link>
    </div>
    <div className="categories-main-page">
       {categories.length? 
       categories.map(category => <AdminCategoryCard id={category.id} name={category.name} picture={category.picture} />)
     : <p>No categories</p>}
    </div>
-   <button onClick={() => setAddModal(!addModal)}>Add category</button>
-   { addModal && <AddModal/> }
+   <div class="admin-add-category-button">
+    <button onClick={() => setAddModal(!addModal)}>Add category</button>
+   </div>
+   <div class="admin-add-category-modal">
+    { addModal && <AddModal/> }
+   </div>
    </>
  </div>
   )
